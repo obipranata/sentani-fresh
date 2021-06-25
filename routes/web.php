@@ -27,9 +27,14 @@ Route::middleware(['kurir'])->group(function(){
     Route::post('/updatenotif/{kd_notif}', 'kurir\NotifController@updatenotif');
     Route::post('/kirimnotifbaru/{pembeli}/{kurir_reject}', 'kurir\NotifController@kirimnotifbaru');
     Route::post('/updatelokasi','kurir\KurirController@updatelokasi');
+    Route::post('/updateplayerid','kurir\KurirController@updateplayerid');
 });
 
 Route::middleware(['admin'])->group(function(){
+    Route::post('/admin/pembeli/download', 'admin\PembeliController@download');
+    Route::post('/admin/kurir/download', 'admin\KurirController@download');
+    Route::post('/admin/penjual/download', 'admin\PenjualController@download');
+    Route::post('/admin/riwayatpenjualan/download', 'admin\PenjualanController@download');
     Route::resource('kategori', 'admin\KategoriController');
     Route::resource('admin/pembeli', 'admin\PembeliController');
     Route::resource('admin/kurir', 'admin\KurirController');

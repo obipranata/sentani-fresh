@@ -18,6 +18,16 @@
     <link rel="stylesheet" href="/admin/assets/css/app.css">
     <link rel="shortcut icon" href="/admin/assets/images/favicon.svg" type="image/x-icon">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+    <script>
+        window.OneSignal = window.OneSignal || [];
+        OneSignal.push(function() {
+            OneSignal.init({
+            appId: "3b514bae-20de-4dd3-9f4c-a159eb52f569",
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -168,4 +178,56 @@
 </body>
 
 </html>
+
+<script>
+    OneSignal.push(function() {
+
+    /* These examples are all valid */
+    var isPushSupported = OneSignal.isPushNotificationsSupported();
+        if (isPushSupported) {
+            // Push notifications are supported
+            alert('oke')
+            console.log('supported');
+            OneSignal.isPushNotificationsEnabled(function(isEnabled) {
+                if (isEnabled){
+                    console.log("Push notifications are enabled!");
+                    OneSignal.getUserId(function(userId) {
+                        console.log("OneSignal User ID:", userId);
+                        // (Output) OneSignal User ID: 270a35cd-4dda-4b3f-b04e-41d7463a2316    
+
+                        let url = "{{ url('/updateplayerid') }} ";
+
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        });
+
+                        $.ajax({
+                            type: 'POST',
+                            url: url,
+                            data: {
+                                'player_id' : userId,
+                                "_token": "{{ csrf_token() }}"
+                            },
+                            success: function(data){
+                                console.log(data);
+                            }
+                        });
+                        
+                    });
+                }
+                else{
+                    console.log("Push notifications are not enabled yet.");    
+                    OneSignal.push(function() {
+                        OneSignal.showSlidedownPrompt();
+                    });
+                }
+            });
+        } else {
+            // Push notifications are not supported
+            console.log('not supported');
+        }
+    });
+</script>
 

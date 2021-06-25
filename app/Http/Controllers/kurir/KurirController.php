@@ -19,4 +19,15 @@ class KurirController extends Controller
         ];
         Kurir::where('username', $username)->update($data_lokasi);
     }
+
+    public function updateplayerid(Request $request){
+        $user = $request->user();
+
+        $username = $user->username;
+
+        $data_player_id = [
+            'player_id' => $_POST['player_id']
+        ];
+        Kurir::where('username', $username)->update($data_player_id);
+    }
 }
