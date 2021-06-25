@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
-use App\Models\Poin;
+use App\Models\Saldo;
 use Illuminate\Http\Request;
 use App\Models\Topup;
 use Symfony\Component\Console\Input\Input;
@@ -97,7 +97,7 @@ class PaymentController extends Controller
         // dd($username);
 
         $cek_topup = Topup::where('no_topup', $no_topup)->first();
-        $poin = Poin::where('username', $username)->first();
+        $saldo = Saldo::where('username', $username)->first();
 
         if ($cek_topup){
             return abort(404);
@@ -135,7 +135,7 @@ class PaymentController extends Controller
                     // TODO set payment status in merchant's database to 'Success'
                     $paymentStatus = Topup::SUCCESS;
                     Topup::where('no_topup', $no_topup)->update(['payment_date' => $paymentInfo->settlement_time, 'payment_status' => $paymentStatus]);
-                    Poin::where('username', $username)->update(['jumlah' => $paymentInfo->gross_amount + $poin->jumlah]);
+                    Saldo::where('username', $username)->update(['jumlah' => $paymentInfo->gross_amount + $saldo->jumlah]);
                 }
             }
         
@@ -143,7 +143,7 @@ class PaymentController extends Controller
             // TODO set payment status in merchant's database to 'Settlement'
             $paymentStatus = Topup::SETTLEMENT;
             Topup::where('no_topup', $no_topup)->update(['payment_date' => $paymentInfo->settlement_time, 'payment_status' => $paymentStatus]);
-            Poin::where('username', $username)->update(['jumlah' => $paymentInfo->gross_amount + $poin->jumlah]);
+            Saldo::where('username', $username)->update(['jumlah' => $paymentInfo->gross_amount + $saldo->jumlah]);
         }else if($transaction == 'pending'){
             // TODO set payment status in merchant's database to 'Pending'
             $paymentStatus = Topup::PENDING;

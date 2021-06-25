@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Topup;
-use App\Models\Poin;
+use App\Models\Saldo;
 use Illuminate\Support\Facades\DB;
 use Session;
 
@@ -24,7 +24,7 @@ class HomeController extends Controller
 
         if($user){
 
-            $poin = Poin::where('username', $username)->first();
+            $saldo = Saldo::where('username', $username)->first();
 
             $this->initPaymentGateway();
             $topup = Topup::where(['username' => $username, 'payment_status' => 'pending'])->first();
@@ -41,7 +41,7 @@ class HomeController extends Controller
 
                 if ($payment_status == 'success' || $payment_status =='settlement') {
                     Topup::where('no_topup', $topup->no_topup)->update(['payment_date' => $paymentInfo->settlement_time, 'payment_status' => $payment_status]);
-                    Poin::where('username', $username)->update(['jumlah' => $paymentInfo->gross_amount + $poin->jumlah]);
+                    Saldo::where('username', $username)->update(['jumlah' => $paymentInfo->gross_amount + $saldo->jumlah]);
                 }
             }
 

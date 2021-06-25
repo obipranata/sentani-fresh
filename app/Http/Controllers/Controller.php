@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Topup;
-use App\Models\Poin;
+use App\Models\Saldo;
 use Illuminate\Http\Request;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;

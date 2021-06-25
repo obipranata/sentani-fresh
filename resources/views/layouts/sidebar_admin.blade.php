@@ -17,6 +17,32 @@
             </a>
         </li>
         
+        <li class="sidebar-title">Laporan</li>
+        <li class="sidebar-item {{ Request::segment(2) == 'pembeli' ? 'active' : '' }}">
+            <a href="/admin/pembeli" class='sidebar-link'>
+                <i class="bi bi-person"></i>
+                <span>Pembeli</span>
+            </a>
+        </li>
+        <li class="sidebar-item {{ Request::segment(2) == 'kurir' ? 'active' : '' }}">
+            <a href="/admin/kurir" class='sidebar-link'>
+                <i class="bi bi-bicycle"></i>
+                <span>Kurir</span>
+            </a>
+        </li>
+        <li class="sidebar-item {{ Request::segment(2) == 'penjual' ? 'active' : '' }}">
+            <a href="/admin/penjual" class='sidebar-link'>
+                <i class="bi bi-basket"></i>
+                <span>Penjual</span>
+            </a>
+        </li>
+        <li class="sidebar-item {{ Request::segment(2) == 'penjualan' ? 'active' : '' }}">
+            <a href="/admin/penjualan" class='sidebar-link'>
+                <i class="bi bi-bag-check"></i>
+                <span>Riwayat Penjualan</span>
+            </a>
+        </li>
+
         <li class="sidebar-title">Keluar</li>
         <li class="sidebar-item">
             <a href="{{ route('logout') }}" class='sidebar-link' onclick="event.preventDefault();

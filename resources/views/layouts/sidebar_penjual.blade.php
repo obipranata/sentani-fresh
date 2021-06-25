@@ -3,10 +3,10 @@
     <ul class="menu">
         @php
             $username =  Auth::user()->username;
-            $poin = DB::select("SELECT * from poin WHERE username = '$username' "); 
+            $saldo = DB::select("SELECT * from saldo WHERE username = '$username' "); 
             $topup = \App\Models\Topup::where(['username' => $username, 'payment_status' => 'pending'])->first();
         @endphp
-        <h6>SF Poin (<span class="text-primary">{{number_format($poin[0]->jumlah)}}</span>)</h6> <span></span>
+        <h6>SF Saldo (<span class="text-primary">{{number_format($saldo[0]->jumlah)}}</span>)</h6> <span></span>
         <li class="sidebar-title">Menu</li>
 
         <li class="sidebar-item {{Request::segment(1) == 'home' ? 'active' : ''}} ">
@@ -41,7 +41,7 @@
             {{-- <li class="sidebar-item">
                 <a href="#" class='sidebar-link' data-toggle="modal" data-target="#topupModal">
                     <i class="ion-ios-card"></i>
-                    <span>Topup Poin</span>
+                    <span>Topup Saldo</span>
                 </a>
             </li> --}}
         @endif

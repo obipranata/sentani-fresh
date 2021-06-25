@@ -76,7 +76,7 @@
                             @php
                                 $username =  Auth::user()->username;
                                 $keranjang = DB::select("SELECT count(kd_keranjang) as jml FROM keranjang WHERE username = '$username' "); 
-                                $poin = DB::select("SELECT * from poin WHERE username = '$username' "); 
+                                $saldo = DB::select("SELECT * from saldo WHERE username = '$username' "); 
                                 $pembelian = DB::select("SELECT * from pembelian WHERE pembeli = '$username' ");
                                 $topup = \App\Models\Topup::where(['username' => $username, 'payment_status' => 'pending'])->first();
 
@@ -92,7 +92,7 @@
 
                                     if ($payment_status == 'success' || $payment_status =='settlement') {
                                         \App\Models\Topup::where('no_topup', $topup->no_topup)->update(['payment_date' => $paymentInfo->settlement_time, 'payment_status' => $payment_status]);
-                                        \App\Models\Poin::where('username', $username)->update(['jumlah' => $paymentInfo->gross_amount + $poin[0]->jumlah]);
+                                        \App\Models\Saldo::where('username', $username)->update(['jumlah' => $paymentInfo->gross_amount + $saldo[0]->jumlah]);
                                     }
                                 }
 
@@ -118,7 +118,7 @@
                             @else  
                                 @if (Auth::user()->level == 3)
                                     <li class="nav-item">
-                                        <a href="" class="nav-link" data-toggle="modal" data-target="#topupModal">Isi SF poin (<span class="text-success">{{number_format($poin[0]->jumlah)}}</span>)</a>
+                                        <a href="" class="nav-link" data-toggle="modal" data-target="#topupModal">Isi SF saldo (<span class="text-success">{{number_format($saldo[0]->jumlah)}}</span>)</a>
                                     </li>
                                 @endif                             
                             @endif
@@ -200,7 +200,7 @@
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Topup Poin Sentani Fresh</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Topup Saldo Sentani Fresh</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>

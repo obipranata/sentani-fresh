@@ -1,18 +1,18 @@
-@extends('layouts.templates_penjual')
+@extends('layouts.templates_admin')
 
-@section('content_penjual')
+@section('content_admin')
 <div class="page-heading">
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Data Produk</h3>
-                <p class="text-subtitle text-muted">beberapa produk penjualan.</p>
+                <h3>Data Pembeli</h3>
+                <p class="text-subtitle text-muted">pembeli yang terdaftar.</p>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/home">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Produk</li>
+                        <li class="breadcrumb-item active" aria-current="page">Pembeli</li>
                     </ol>
                 </nav>
             </div>
@@ -28,34 +28,33 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th></th>
-                            <th>Produk</th>
-                            <th>No nota</th>
-                            <th>Tgl pembelian</th>
-                            <th>Jml produk</th>
-                            <th>Total</th>
-                            <th>Pembeli</th>
-                            <th>Kurir</th>
+                            <th>Nama</th>
+                            <th>Alamat</th>
+                            <th>No HP</th>
+                            <th>Username</th>
                         </tr>
                     </thead>
                     <tbody>
                         @php
                             $i=0;
                         @endphp
-                        @foreach ($penjualan as $p)                       
+                        @foreach ($pembeli as $p)   
+                            @foreach ($user as $u)
+                                @if ($u->username == $p->username)
+                                    @php
+                                        $nama = $u->nama;
+                                    @endphp
+                                
+                                @endif
+                            @endforeach
                             <tr>
                                 <td>{{++$i}}</td>
-                                <td>
-                                    <img class=" img-fluid" src="/foto_produk/{{$p->foto}}"alt="Card image cap" width="80" />
-                                </td>
-                                <td>{{$p->nama_produk}}</td>
-                                <td>{{$p->no_nota}}</td>
-                                <td>{{$p->tgl_pembelian}}</td>
-                                <td>{{$p->jml_produk}}</td>
-                                <td>{{$p->total}}</td>
-                                <td>{{$p->pembeli}}</td>
-                                <td>{{$p->kurir}}</td>
+                                <td>{{$nama}}</td>
+                                <td>{{$p->alamat}}</td>
+                                <td>{{$p->no_hp}}</td>
+                                <td>{{$p->username}}</td>
                             </tr>
+                            
                         @endforeach
                     </tbody>
                 </table>

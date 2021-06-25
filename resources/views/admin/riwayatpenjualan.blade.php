@@ -1,6 +1,6 @@
-@extends('layouts.templates_penjual')
+@extends('layouts.templates_admin')
 
-@section('content_penjual')
+@section('content_admin')
 <div class="page-heading">
     <div class="page-title">
         <div class="row">
@@ -34,6 +34,7 @@
                             <th>Tgl pembelian</th>
                             <th>Jml produk</th>
                             <th>Total</th>
+                            <th>Penjual</th>
                             <th>Pembeli</th>
                             <th>Kurir</th>
                         </tr>
@@ -53,6 +54,7 @@
                                 <td>{{$p->tgl_pembelian}}</td>
                                 <td>{{$p->jml_produk}}</td>
                                 <td>{{$p->total}}</td>
+                                <td>{{$p->username}}</td>
                                 <td>{{$p->pembeli}}</td>
                                 <td>{{$p->kurir}}</td>
                             </tr>

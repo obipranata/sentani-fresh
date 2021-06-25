@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\penjual;
 use App\Models\Topup;
-use App\Models\Poin;
+use App\Models\Saldo;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

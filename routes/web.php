@@ -20,7 +20,6 @@ Route::post('/produk/{kd_kategori}', 'ProdukController@pilihproduk');
 Route::get('/single/{kd_produk}', 'ProdukController@single');
 
 
-
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware(['verified']);
 
 Route::middleware(['kurir'])->group(function(){
@@ -31,25 +30,11 @@ Route::middleware(['kurir'])->group(function(){
 });
 
 Route::middleware(['admin'])->group(function(){
-    // // tampil data
-    // Route::get('/kategori', 'admin\KategoriController@index');
-
-    // // halaman insert data
-    // Route::get('/kategori/create', 'admin\KategoriController@create');
-
-    // // halaman edit data
-    // Route::get('/kategori/{kd_kategori}/edit', 'admin\KategoriController@edit');
-
-    // // simpan data kedalam database
-    // Route::post('/kategori', 'admin\KategoriController@store');
-
-    // // ubah data kedalam data base
-    // Route::put('/kategori/{kd_kategori}', 'admin\KategoriController@update');
-
-    // // hapus data
-    // Route::delete('/kategori/{kd_kategori}', 'admin\KategoriController@destroy');
-
     Route::resource('kategori', 'admin\KategoriController');
+    Route::resource('admin/pembeli', 'admin\PembeliController');
+    Route::resource('admin/kurir', 'admin\KurirController');
+    Route::resource('admin/penjual', 'admin\PenjualController');
+    Route::resource('admin/penjualan', 'admin\PenjualanController');
 });
 
 Route::middleware(['penjual'])->group(function(){

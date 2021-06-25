@@ -146,7 +146,7 @@
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Topup Poin Sentani Fresh</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Topup Saldo Sentani Fresh</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -168,7 +168,7 @@
 
     @php
         $username =  Auth::user()->username;
-        $poin = DB::select("SELECT * from poin WHERE username = '$username' "); 
+        $saldo = DB::select("SELECT * from saldo WHERE username = '$username' "); 
         $topup = \App\Models\Topup::where(['username' => $username, 'payment_status' => 'pending'])->first();
 
         if (!empty($topup)) {
@@ -183,7 +183,7 @@
 
             if ($payment_status == 'success' || $payment_status =='settlement') {
                 \App\Models\Topup::where('no_topup', $topup->no_topup)->update(['payment_date' => $paymentInfo->settlement_time, 'payment_status' => $payment_status]);
-                \App\Models\Poin::where('username', $username)->update(['jumlah' => $paymentInfo->gross_amount + $poin[0]->jumlah]);
+                \App\Models\Saldo::where('username', $username)->update(['jumlah' => $paymentInfo->gross_amount + $saldo[0]->jumlah]);
             }
         }
     @endphp

@@ -12,7 +12,7 @@ use App\Models\Produk;
 use App\Models\Keranjang;
 use App\Models\Notif;
 use App\Models\Pembeli;
-use App\Models\Poin;
+use App\Models\Saldo;
 use App\Models\Pembelian;
 use App\Models\Rating;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +31,7 @@ class ProdukController extends Controller
         $user = $request->user();
         if ($user) {
             $username = $user->username;
-            $poin = Poin::where('username', $username)->first();
+            $saldo = Saldo::where('username', $username)->first();
 
             $this->initPaymentGateway();
             $topup = Topup::where(['username' => $username, 'payment_status' => 'pending'])->first();
@@ -48,7 +48,7 @@ class ProdukController extends Controller
 
                 if ($payment_status == 'success' || $payment_status =='settlement') {
                     Topup::where('no_topup', $topup->no_topup)->update(['payment_date' => $paymentInfo->settlement_time, 'payment_status' => $payment_status]);
-                    Poin::where('username', $username)->update(['jumlah' => $paymentInfo->gross_amount + $poin->jumlah]);
+                    Saldo::where('username', $username)->update(['jumlah' => $paymentInfo->gross_amount + $saldo->jumlah]);
                 }
             }
         }
@@ -254,12 +254,12 @@ class ProdukController extends Controller
         $kurir = DB::select("SELECT * FROM kurir"); 
 
         if (!empty($kurir)){
-            $poin = Poin::where('username', $username)->first();
-            if ($poin->jumlah >= ($harga_produk + $total_ongkir)){
-                $jumlah = $poin->jumlah - $harga_produk;
-                DB::select("UPDATE poin SET jumlah = '$jumlah' WHERE username = '$username' ");
+            $saldo = Saldo::where('username', $username)->first();
+            if ($saldo->jumlah >= ($harga_produk + $total_ongkir)){
+                $jumlah = $saldo->jumlah - $harga_produk;
+                DB::select("UPDATE saldo SET jumlah = '$jumlah' WHERE username = '$username' ");
             }else{
-                return redirect('/keranjang')->with('error','maaf poin anda tidak cukup !');
+                return redirect('/keranjang')->with('error','maaf saldo anda tidak cukup !');
             }
         } else {
             return redirect('/keranjang')->with('error','maaf tidak ada kurir yang siap!');
@@ -300,23 +300,23 @@ class ProdukController extends Controller
 
         $toko = DB::select("SELECT penjual.kd_penjual, penjual.nama_toko,penjual.username, sum(keranjang.jumlah*produk.harga) as laku FROM penjual, produk, keranjang, detail_produk WHERE penjual.kd_penjual = produk.kd_penjual AND keranjang.kd_produk = produk.kd_produk AND keranjang.kd_produk = detail_produk.kd_produk AND keranjang.username = '$username' GROUP BY produk.kd_penjual ORDER BY keranjang.kd_keranjang ");
 
-        $poin_pembeli = Poin::where('username', $username)->first();
-        $poin_kurir = Poin::where('username', $kurir)->first();
+        $poin_pembeli = Saldo::where('username', $username)->first();
+        $poin_kurir = Saldo::where('username', $kurir)->first();
         $total_ongkir +=  $poin_kurir->jumlah ;
 
         if ($poin_pembeli->jumlah >= $total_ongkir){
             $jumlah_pembeli = $poin_pembeli->jumlah - $total_ongkir;
             $jumlah_kurir = $total_ongkir;
-            DB::select("UPDATE poin SET jumlah = '$jumlah_pembeli' WHERE username = '$username' ");
-            DB::select("UPDATE poin SET jumlah = '$jumlah_kurir' WHERE username = '$kurir' ");
+            DB::select("UPDATE saldo SET jumlah = '$jumlah_pembeli' WHERE username = '$username' ");
+            DB::select("UPDATE saldo SET jumlah = '$jumlah_kurir' WHERE username = '$kurir' ");
 
-            // poin akan masuk ke para penjual
+            // saldo akan masuk ke para penjual
             foreach($toko as $t){
                 $laku = $t->laku;
                 $penjual = $t->username;
-                $poin_penjual = Poin::where('username', $penjual)->first();
+                $poin_penjual = Saldo::where('username', $penjual)->first();
                 $pendapatan_bersih = ($laku - ($laku * 0.02)) + $poin_penjual->jumlah;
-                DB::select("UPDATE poin SET jumlah = '$pendapatan_bersih' WHERE username = '$penjual' ");
+                DB::select("UPDATE saldo SET jumlah = '$pendapatan_bersih' WHERE username = '$penjual' ");
             }
 
             $this->_pembelian($username, $kurir);
@@ -325,7 +325,7 @@ class ProdukController extends Controller
 
             return redirect('/')->with('success','transaksi pembayaran selesai!');
         }else{
-            return redirect('/keranjang')->with('error','maaf poin anda tidak cukup !');
+            return redirect('/keranjang')->with('error','maaf saldo anda tidak cukup !');
         }
     }
 

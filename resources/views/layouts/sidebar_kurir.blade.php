@@ -3,9 +3,9 @@
     <ul class="menu">
         @php
             $username =  Auth::user()->username;
-            $poin = DB::select("SELECT * from poin WHERE username = '$username' "); 
+            $saldo = DB::select("SELECT * from saldo WHERE username = '$username' "); 
         @endphp
-        <h6>SF Poin (<span class="text-primary">{{number_format($poin[0]->jumlah)}}</span>)</h6>
+        <h6>SF Saldo (<span class="text-primary">{{number_format($saldo[0]->jumlah)}}</span>)</h6>
         <li class="sidebar-title">Menu</li>
 
         <li class="sidebar-item {{Request::segment(1) == 'home' ? 'active' : ''}} ">
