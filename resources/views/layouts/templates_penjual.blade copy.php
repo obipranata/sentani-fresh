@@ -17,9 +17,9 @@
     <link rel="stylesheet" href="/admin/assets/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="/admin/assets/css/app.css">
     <link rel="shortcut icon" href="/admin/assets/images/favicon.svg" type="image/x-icon">
-        <link rel="stylesheet" href="/assets/fontawesome/css/all.min.css">
-        <script src="/admin/assets/vendors/ckeditor/style.js"></script>
-        <script src="/admin/assets/vendors/ckeditor/ckeditor.js"></script>
+    {{-- <link rel="stylesheet" href="/assets/fontawesome/css/all.min.css"> --}}
+    <script src="/admin/assets/vendors/ckeditor/style.js"></script>
+    <script src="/admin/assets/vendors/ckeditor/ckeditor.js"></script>
 </head>
 
 <body>
@@ -63,7 +63,6 @@
             </footer>
         </div>
     </div>
-
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/admin/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
@@ -73,67 +72,67 @@
 
     <script src="/admin/assets/vendors/simple-datatables/simple-datatables.js"></script>
 
+
+
     <script>
         // Simple Datatable
         let table1 = document.querySelector('#table1');
         let dataTable = new simpleDatatables.DataTable(table1);
     </script>
 
-    <script src="/admin/assets/js/main.js"></script>
+    {{-- <script src="/admin/assets/js/bootstrap.bundle.min.js"></script> --}}
+    <script src="/assets/js/main.js"></script>
     <script src="/admin/assets/vendors/sweetalert2/sweetalert2.all.min.js"></script>
-    {{-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script> --}}
+    
+        @if ($message = Session::get('success'))
+            <div class="info">
+                {{$message}}
+            </div>
+            <script>
+                Swal.fire(
+                'Berhasil!',
+                "Data telah di "+$(".info").html(),
+                'success'
+                )
+            </script>
+        @endif
 
-    @if ($message = Session::get('success'))
-    <div class="info">
-        {{$message}}
-    </div>
     <script>
-        Swal.fire(
-        'Berhasil!',
-        "Data telah di "+$(".info").html(),
-        'success'
-        )
+        $(".hapus").click(function(e){
+            e.preventDefault();
+
+            // id = e.target.dataset.id;
+            id = $(this).data("id");
+            // nama = e.target.dataset.nama;
+            nama =$(this).data('nama');
+            Swal.fire({
+            title: 'Apakah anda yakin hapus ' +nama,
+            text: `data ${nama} akan hilang.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Batal',
+            confirmButtonText: 'Ya'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                $(`#delete${id}`).submit();
+            }
+            })
+        })
+
+        $("#tambah-foto").click(function(){
+            console.log('okee')
+            $(".foto-produk").append(`
+                                                <div class="col-12">
+                                    <div class="form-group">
+                                        <input type="file" class="form-control-file" name="foto[]">
+                                    </div>
+                                </div>
+            `);
+        });
     </script>
-@endif
-
-<script>
-$(".hapus").click(function(e){
-    e.preventDefault();
-
-    // id = e.target.dataset.id;
-    id = $(this).data("id");
-    // nama = e.target.dataset.nama;
-    nama =$(this).data('nama');
-    Swal.fire({
-    title: 'Apakah anda yakin hapus ' +nama,
-    text: `data ${nama} akan hilang.`,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    cancelButtonText: 'Batal',
-    confirmButtonText: 'Ya'
-    }).then((result) => {
-    if (result.isConfirmed) {
-        $(`#delete${id}`).submit();
-    }
-    })
-})
-
-$("#tambah-foto").click(function(){
-    console.log('okee')
-    $(".foto-produk").append(`
-                                        <div class="col-12">
-                            <div class="form-group">
-                                <input type="file" class="form-control-file" name="foto[]">
-                            </div>
-                        </div>
-    `);
-});
-</script>
-
 
 </body>
 
 </html>
-

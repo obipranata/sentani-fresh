@@ -26,7 +26,7 @@
             <div class="card-body">
                 <div class="row">
                     @foreach ($allproduk as $p)                      
-                        <div class="col-3">
+                        <div class="col-lg-3">
                             <a href="/produk/{{$p->kd_produk}}" >
                                 <div class="card">
                                     <div class="card-content">

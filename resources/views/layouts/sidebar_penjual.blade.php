@@ -18,14 +18,14 @@
 
         <li class="sidebar-item {{ Request::segment(1) == 'produk' ? 'active' : '' }}">
             <a href="/produk" class='sidebar-link'>
-                <i class="ion-ios-briefcase"></i>
+                <i class="bi bi-briefcase"></i>
                 <span>Produk</span>
             </a>
         </li>
 
         <li class="sidebar-item {{ Request::segment(1) == 'riwayatpenjualan' ? 'active' : '' }}">
             <a href="/riwayatpenjualan" class='sidebar-link'>
-                <i class="ion-ios-clock"></i>
+                <i class="bi bi-clock"></i>
                 <span>Riwayat Penjualan</span>
             </a>
         </li>
