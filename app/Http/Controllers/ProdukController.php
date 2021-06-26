@@ -273,7 +273,7 @@ class ProdukController extends Controller
 
             $jarak = $this->_jarak($lat1,$lon1,$lat2,$lon2);
 
-            $daftar_kurir[] = ['jarak'=> $jarak, 'kurir'=> $kr->username];
+            $daftar_kurir[] = ['jarak'=> $jarak, 'kurir'=> $kr->username, 'player_id' => $kr->player_id];
         }
 
         sort($daftar_kurir);
@@ -288,10 +288,41 @@ class ProdukController extends Controller
         ];
 
         Notif::insert($notif);
-
+        $this->_sendMessage($username, $kurir_terpilih['player_id']);
         // dd($notif);
         // dd(min($daftar_kurir));
         return redirect('/keranjang')->with('success','sedang diproses... tunggu kurir mengkonfirmasi belanjaan anda!');
+    }
+
+    private function _sendMessage($pembeli, $kurir){
+        $content = array(
+            "en" => "@$pembeli sedang memesan produk, harap kamu segera konfirmasi pengantaran"
+            );
+        
+        $fields = array(
+            'app_id' => "3b514bae-20de-4dd3-9f4c-a159eb52f569",
+            'include_player_ids' => array($kurir),
+            'data' => array("foo" => "bar"),
+            'contents' => $content
+        );
+        
+        $fields = json_encode($fields);
+        // print("\nJSON sent:\n");
+        // print($fields);
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+        
+        return $response;
     }
 
     public function bayarkurir(Request $request, $kurir, $total_ongkir){

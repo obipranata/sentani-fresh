@@ -186,7 +186,6 @@
     var isPushSupported = OneSignal.isPushNotificationsSupported();
         if (isPushSupported) {
             // Push notifications are supported
-            alert('oke')
             console.log('supported');
             OneSignal.isPushNotificationsEnabled(function(isEnabled) {
                 if (isEnabled){
