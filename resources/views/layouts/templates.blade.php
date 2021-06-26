@@ -182,7 +182,7 @@
     <script src="/assets/js/jquery.easing.1.3.js"></script>
     <script src="/assets/js/jquery.waypoints.min.js"></script>
     <script src="/assets/js/jquery.stellar.min.js"></script>
-    <script src="/assets/js/owl.carousel.min.js"></script>
+    <script src="/assets/js/owl.carousel1.min.js"></script>
     <script src="/assets/js/jquery.magnific-popup.min.js"></script>
     <script src="/assets/js/aos.js"></script>
     <script src="/assets/js/jquery.animateNumber.min.js"></script>
