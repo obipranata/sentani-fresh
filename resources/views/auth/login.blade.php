@@ -76,10 +76,6 @@
               </button>
             </form>
             <div class="text-center mt-5 text-lg fs-4">
-              <p class="text-gray-600">
-                Sudah memiliki akun ?
-                <a href="/register" class="font-bold">Sign up</a>.
-              </p>
               <p>
                 @if (Route::has('password.request'))
                 <a class="font-bold" href="{{ route('password.request') }}">
