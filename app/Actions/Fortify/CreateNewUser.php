@@ -5,7 +5,7 @@ namespace App\Actions\Fortify;
 use App\Models\User;
 use App\Models\Pembeli;
 use App\Models\Penjual;
-use App\Models\Poin;
+use App\Models\Saldo;
 use App\Models\Kurir;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -71,11 +71,11 @@ class CreateNewUser implements CreatesNewUsers
             Kurir::insert($data_kurir);
         }
 
-        $data_poin = [
+        $data_saldo = [
             'username' => $input['username'],
             'jumlah' => 0
         ];
-        Poin::insert($data_poin);
+        Saldo::insert($data_saldo);
 
         return User::create([
             'nama' => $input['nama'],
