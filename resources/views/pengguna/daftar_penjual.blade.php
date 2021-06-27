@@ -28,11 +28,11 @@
             </div>
 
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="nama toko" name="nama_toko">
+              <input type="text" class="form-control" placeholder="nama toko" name="nama_toko" required>
             </div>
 
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="nama penjual" name="nama">
+              <input type="text" class="form-control" placeholder="nama penjual" name="nama" required>
 
               @error('nama')
                   <span class="invalid-feedback" role="alert">
@@ -60,11 +60,11 @@
             </div>
 
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="alamat" name="alamat">
+              <input type="text" class="form-control" placeholder="alamat" name="alamat" required>
             </div>
 
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="no hp" name="no_hp">
+              <input type="text" class="form-control" placeholder="no hp" name="no_hp" required>
             </div>
 
             <div class="form-group">
