@@ -153,6 +153,6 @@ class NotifController extends Controller
         $response = curl_exec($ch);
         curl_close($ch);
         
-        return redirect('/notif')->with('success','pesan telah dikirim');
+        return redirect('/notif')->with('success','dikirim');
     }
 }
