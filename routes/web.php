@@ -16,6 +16,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::get('/', 'ProdukController@index');
 Route::get('/produks', 'ProdukController@produk');
+Route::post('/produks', 'ProdukController@produk');
 Route::post('/produk/{kd_kategori}', 'ProdukController@pilihproduk');
 Route::get('/single/{kd_produk}', 'ProdukController@single');
 
@@ -26,6 +27,7 @@ Route::middleware(['kurir'])->group(function(){
     Route::get('/notif', 'kurir\NotifController@notif');
     Route::post('/updatenotif/{kd_notif}', 'kurir\NotifController@updatenotif');
     Route::post('/kirimnotifbaru/{pembeli}/{kurir_reject}', 'kurir\NotifController@kirimnotifbaru');
+    Route::post('/kirimpesan/{pembeli}', 'kurir\NotifController@kirimpesan');
     Route::post('/updatelokasi','kurir\KurirController@updatelokasi');
     Route::post('/updateplayerid','kurir\KurirController@updateplayerid');
 });
@@ -40,6 +42,7 @@ Route::middleware(['admin'])->group(function(){
     Route::resource('admin/kurir', 'admin\KurirController');
     Route::resource('admin/penjual', 'admin\PenjualController');
     Route::resource('admin/penjualan', 'admin\PenjualanController');
+    Route::resource('admin/pendapatan', 'admin\PendapatanController');
 });
 
 Route::middleware(['penjual'])->group(function(){
@@ -48,6 +51,9 @@ Route::middleware(['penjual'])->group(function(){
     Route::post('/tambahfoto/{kd_produk}','penjual\ProdukController@tambahfoto');
     Route::get('/riwayatpenjualan','penjual\RiwayatPenjualanController@index');
     Route::post('/topup_penjual', 'TopupController@index');
+    Route::get('/notifpenjual', 'penjual\NotifController@index');
+    Route::post('/updatenotifpenjual/{kd_notif}', 'Penjual\NotifController@updatenotif');
+    Route::post('/updateplayeridpenjual','penjual\NotifController@updateplayerid');
 });
 
 Route::middleware(['pembeli'])->group(function(){
@@ -62,6 +68,7 @@ Route::middleware(['pembeli'])->group(function(){
     Route::post('/nilaiproduk/{kd_pembelian}/{bintang}', 'ProdukController@nilaiproduk');
     Route::post('/insertnilai/{kd_pembelian}/{bintang}', 'ProdukController@insertnilai');
     Route::post('/topup', 'TopupController@index');
+    Route::post('/updateplayeridpembeli','ProdukController@updateplayerid');
 });
 
 Route::post('/payment/notification', 'PaymentController@notification');

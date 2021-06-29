@@ -18,8 +18,8 @@ class Topup extends Model
     // "bca_va", "bni_va", "bri_va", "other_va", "gopay", "indomaret",
     // "danamon_online", "akulaku", "shopeepay"];
 
-    public const EXPIRY_DURATION = 1;
-    public const EXPIRY_UNIT = 'days';
+    public const EXPIRY_DURATION = 3;
+    public const EXPIRY_UNIT = 'minutes';
 
     public const CHALLENGE = 'challenge';
     public const SUCCESS = 'success';

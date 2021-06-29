@@ -37,13 +37,13 @@
                                     <tr class="text-center">
 
                                         @if (empty($notif))                                          
-                                            <td class="">
-                                                <a href="#" data-id="{{$k->kd_keranjang}}" data-nama="{{$k->nama_produk}}" class="btn btn-danger product-remove hapus">
-                                                    <span class="ion-ios-close"><span>
+                                            <td>
+                                                <a href="" data-id="{{$k->kd_keranjang}}" data-nama="{{$k->nama_produk}}" class="btn btn-danger product-remove hapus">
                                                     <form action="/keranjang/{{$k->kd_keranjang}}" id="delete{{$k->kd_keranjang}}" method="post">
                                                         @csrf
-                                                        @method('DELETE')
+                                                        @method('delete')
                                                     </form>
+                                                    <span class="ion-ios-close"><span>
                                                 </a>
                                             </td>
                                         @endif
@@ -153,12 +153,12 @@
                         <a href="#" data-harga="{{number_format($harga_produk)}}" class="btn btn-primary py-3 px-4 tombol-checkout">
                             checkout
                             <form action="/kirimnotif/{{ Auth::user()->username }}/{{$harga_produk}}/{{$total_ongkir}}" id="checkout" method="post">
-                                    @csrf
+                                @csrf
                             </form>
                         </a>
                 @else
                     @if ($notif->status == 1)
-                        <p class="text-danger"><i>kurir segera mengantar pesanan anda</i> <span class="text-success">[{{$notif->kurir}}]</span></p> 
+                        <p class="text-danger"><i>kurir sedang mengambil pesanan anda pada penjual</i> <span class="text-success">[{{$notif->kurir}}]</span></p> 
                         <a href="#" data-harga="Rp.{{number_format($total_ongkir)}}" class="btn btn-primary py-3 px-4 tombol-bayar-kurir">
                             Transaksi Selesai
                             <form action="/bayarkurir/{{ $notif->kurir }}/{{$total_ongkir}}" id="bayar-kurir" method="post">
@@ -166,8 +166,17 @@
                                 @method('PUT')
                             </form>
                         </a>
-                    @else
+                    @elseif ($notif->status == 0)
                         <p class="text-warning"><i>menuggu konfirmasi kurir </i>[{{$notif->kurir}}]</p>
+                    @elseif ($notif->status == 2)
+                        <p class="text-success"><i>kurir sedang mengantar pesanan anda </i>[{{$notif->kurir}}]</p>
+                        <a href="#" data-harga="Rp.{{number_format($total_ongkir)}}" class="btn btn-primary py-3 px-4 tombol-bayar-kurir">
+                            Transaksi Selesai
+                            <form action="/bayarkurir/{{ $notif->kurir }}/{{$total_ongkir}}" id="bayar-kurir" method="post">
+                                @csrf
+                                @method('PUT')
+                            </form>
+                        </a>
                     @endif
                 @endif
             </div>

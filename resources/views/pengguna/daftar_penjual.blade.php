@@ -28,8 +28,13 @@
             </div>
 
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="nama toko" name="nama_toko" required>
+              <input type="text" class="form-control @error('nama_toko') is-invalid @enderror" placeholder="nama toko" name="nama_toko" required value="{{ old('nama_toko') }}">
             </div>
+            @error('nama_toko')
+              <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+              </span>
+            @enderror
 
             <div class="form-group">
               <input type="text" class="form-control" placeholder="nama penjual" name="nama" required>

@@ -16,6 +16,13 @@
             </a>
         </li>
 
+        <li class="sidebar-item {{ Request::segment(1) == 'notifpenjual' ? 'active' : '' }}">
+            <a href="/notifpenjual" class='sidebar-link'>
+                <i class="bi bi-list"></i>
+                <span>Notifikasi</span>
+            </a>
+        </li>
+
         <li class="sidebar-item {{ Request::segment(1) == 'produk' ? 'active' : '' }}">
             <a href="/produk" class='sidebar-link'>
                 <i class="bi bi-briefcase"></i>

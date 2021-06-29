@@ -42,6 +42,12 @@
                 <span>Riwayat Penjualan</span>
             </a>
         </li>
+        <li class="sidebar-item {{ Request::segment(2) == 'pendapatan' ? 'active' : '' }}">
+            <a href="/admin/pendapatan" class='sidebar-link'>
+                <i class="bi bi-bag-check"></i>
+                <span>Pendapatan pajak 2%</span>
+            </a>
+        </li>
 
         <li class="sidebar-title">Keluar</li>
         <li class="sidebar-item">

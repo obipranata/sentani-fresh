@@ -141,6 +141,7 @@
                                     <p class="price">
                                         <span class="price-sale">Rp{{number_format($p->harga)}}</span>
                                         <p class="text-success">Per {{$p->satuan}}</p>
+                                        <p><span class="icon-home"></span> {{$p->nama_toko}}</p>
                                     </p>
                                 </div>
                             </div>

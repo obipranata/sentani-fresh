@@ -15,7 +15,7 @@
 <section class="ftco-section">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-10 mb-3 text-center">
+            <div class="col-md-8 mb-3 text-center">
                 <ul class="product-category">
                     <li>
                         <a href="/produks" >
@@ -36,6 +36,15 @@
                         </li>
                     @endforeach
                 </ul>
+            </div>
+            <div class="col-md-4 mb-3">
+                <form action="/produks" class="search-form" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <span class="icon ion-ios-search"></span>
+                        <input type="text" class="form-control" placeholder="cari produk..." name="cari">
+                    </div>
+                </form>
             </div>
         </div>
         <div class="row">

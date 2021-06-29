@@ -36,12 +36,22 @@ class HomeController extends Controller
                 $data['va_number'] = $paymentInfo->va_numbers[0]->va_number;
                 $data['batas_pembayaran'] = $paymentInfo->transaction_time;
                 $data['total'] = $paymentInfo->gross_amount;
-                
+                // dd($paymentInfo);
                 $payment_status = $paymentInfo->transaction_status;
 
-                if ($payment_status == 'success' || $payment_status =='settlement') {
-                    Topup::where('no_topup', $topup->no_topup)->update(['payment_date' => $paymentInfo->settlement_time, 'payment_status' => $payment_status]);
-                    Saldo::where('username', $username)->update(['jumlah' => $paymentInfo->gross_amount + $saldo->jumlah]);
+                if ($payment_status == 'success' || $payment_status =='settlement' || $payment_status =='expire') {
+
+                    if ($payment_status =='settlement'){
+                        $settlement_time = $paymentInfo->settlement_time;
+                    } else if ($payment_status =='expire'){
+                        $settlement_time = null;
+                    }
+
+                    Topup::where('no_topup', $topup->no_topup)->update(['payment_date' => $settlement_time, 'payment_status' => $payment_status]);
+
+                    if ($payment_status =='settlement') {
+                        Saldo::where('username', $username)->update(['jumlah' => $paymentInfo->gross_amount + $saldo->jumlah]);
+                    }
                 }
             }
 
@@ -58,7 +68,7 @@ class HomeController extends Controller
                 // dd( $data['penjualan']);
                 return view('penjual.home',$data);
             } else if($user->level == 3){
-                $data['allproduk'] = DB::select("SELECT produk.*, detail_produk.* FROM produk,detail_produk WHERE produk.kd_produk = detail_produk.kd_produk GROUP BY produk.kd_produk");
+                $data['allproduk'] = DB::select("SELECT produk.*, detail_produk.*, penjual.* FROM produk,detail_produk, penjual WHERE produk.kd_produk = detail_produk.kd_produk AND produk.kd_penjual = penjual.kd_penjual GROUP BY produk.kd_produk");
                 return view('pengguna.home', $data);
             } else if($user->level == 4){
                 $pengantaran = DB::select("SELECT count(kd_pembelian) as total_pengantaran, DATE_FORMAT(pembelian.tgl_pembelian, '%M') as bulan FROM pembelian WHERE kurir = '$username' GROUP BY MONTH(tgl_pembelian) ORDER BY MONTH(tgl_pembelian) ");

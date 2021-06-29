@@ -17,8 +17,20 @@
                 </nav>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-danger">
+                        Bahan makanan yang dijual pada aplikasi ini adalah bahan makanan yang telah dibersihkan dan siap untuk dimasak saat sampai pada tangan pembeli.
+                    </li>
+                    <li class="list-group-item list-group-item-warning">
+                        setiap pembelian dari hasil penjualan akan dipotong 2% oleh sistem.
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <section class="section">
+    <section class="section mt-2">
         <div class="card">
             <div class="card-header">
                 <a href="/produk/create" class="btn btn-primary tombol-tambah" >Produk +</a>

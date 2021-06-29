@@ -57,7 +57,10 @@
                                 </div>
                             </div>                        
                         @else
-            
+                            <form action="/kirimpesan/{{$pembeli->username}}" method="POST" class="mt-4">
+                                @csrf
+                                <button class="btn btn-danger rounded-pill" type="submit">Kirim notif ke penjual</button>
+                            </form>
                         @endif
                     @endif
                 </div>

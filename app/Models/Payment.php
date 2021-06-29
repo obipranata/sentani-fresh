@@ -16,8 +16,8 @@ class Payment extends Model
     "bca_va", "bni_va", "bri_va", "other_va", "gopay", "indomaret",
     "danamon_online", "akulaku", "shopeepay"];
 
-    public const EXPIRY_DURATION = 7;
-    public const EXPIRY_UNIT = 'days';
+    public const EXPIRY_DURATION = 180;
+    public const EXPIRY_UNIT = 'minutes';
 
     public const CHALLENGE = 'challenge';
     public const SUCCESS = 'success';

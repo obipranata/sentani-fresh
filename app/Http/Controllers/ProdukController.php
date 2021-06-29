@@ -46,9 +46,19 @@ class ProdukController extends Controller
                 // dd($paymentInfo);
                 $payment_status = $paymentInfo->transaction_status;
 
-                if ($payment_status == 'success' || $payment_status =='settlement') {
-                    Topup::where('no_topup', $topup->no_topup)->update(['payment_date' => $paymentInfo->settlement_time, 'payment_status' => $payment_status]);
-                    Saldo::where('username', $username)->update(['jumlah' => $paymentInfo->gross_amount + $saldo->jumlah]);
+                if ($payment_status == 'success' || $payment_status =='settlement' || $payment_status =='expire') {
+
+                    if ($payment_status =='settlement'){
+                        $settlement_time = $paymentInfo->settlement_time;
+                    } else if ($payment_status =='expire'){
+                        $settlement_time = null;
+                    }
+
+                    Topup::where('no_topup', $topup->no_topup)->update(['payment_date' => $settlement_time, 'payment_status' => $payment_status]);
+
+                    if ($payment_status =='settlement') {
+                        Saldo::where('username', $username)->update(['jumlah' => $paymentInfo->gross_amount + $saldo->jumlah]);
+                    }
                 }
             }
         }
@@ -59,8 +69,13 @@ class ProdukController extends Controller
         return view('pengguna.home', $data);
     }
 
-    public function produk(){
-        $data['allproduk'] = DB::select("SELECT produk.*, detail_produk.*, penjual.* FROM produk,detail_produk, penjual WHERE produk.kd_produk = detail_produk.kd_produk AND produk.kd_penjual = penjual.kd_penjual GROUP BY produk.kd_produk");
+    public function produk(Request $request){
+        $cari = $request->cari;
+        if($cari == ''){
+            $data['allproduk'] = DB::select("SELECT produk.*, detail_produk.*, penjual.* FROM produk,detail_produk, penjual WHERE produk.kd_produk = detail_produk.kd_produk AND produk.kd_penjual = penjual.kd_penjual GROUP BY produk.kd_produk");
+        }else{
+            $data['allproduk'] = DB::select("SELECT produk.*, detail_produk.*, penjual.* FROM produk,detail_produk, penjual WHERE produk.kd_produk = detail_produk.kd_produk AND produk.kd_penjual = penjual.kd_penjual AND produk.nama_produk LIKE '$cari%' GROUP BY produk.kd_produk");
+        }
         $data['kategori'] = DB::select("SELECT * FROM kategori");
         return view('pengguna.produk', $data);
     }
@@ -250,8 +265,29 @@ class ProdukController extends Controller
 
         $all_keranjang = DB::select("SELECT keranjang.*, produk.*, penjual.lat, penjual.lng, penjual.kd_penjual, detail_produk.foto FROM penjual, produk, keranjang, detail_produk WHERE penjual.kd_penjual = produk.kd_penjual AND keranjang.kd_produk = produk.kd_produk AND keranjang.kd_produk = detail_produk.kd_produk AND keranjang.username = '$username' GROUP BY produk.kd_produk ORDER BY keranjang.kd_keranjang");
 
-        // dd($all_keranjang);
-        $kurir = DB::select("SELECT * FROM kurir"); 
+        $k1 = DB::select("SELECT * FROM kurir"); 
+        $k2 = DB::select("SELECT * FROM notif"); 
+        foreach($k1 as $k){
+            $a[] = $k->username;
+        }
+        foreach($k2 as $k){
+            $b[] = $k->kurir;
+        }
+
+        $result=array_diff($a,$b);
+
+        foreach ($result as $r){
+            foreach($k1 as $k){
+                if($r == $k->username){
+                    $kurir[]= [
+                        'username' => $r,
+                        'lat' => $k->lat,
+                        'lng' => $k->lng,
+                        'player_id' => $k->player_id
+                    ];
+                }
+            }
+        }
 
         if (!empty($kurir)){
             $saldo = Saldo::where('username', $username)->first();
@@ -267,13 +303,13 @@ class ProdukController extends Controller
 
         foreach($kurir as $kr){
             $lat1= $all_keranjang[0]->lat;
-            $lat2= $kr->lat;
+            $lat2= $kr['lat'];
             $lon1= $all_keranjang[0]->lng;
-            $lon2= $kr->lng;
+            $lon2= $kr['lng'];
 
             $jarak = $this->_jarak($lat1,$lon1,$lat2,$lon2);
 
-            $daftar_kurir[] = ['jarak'=> $jarak, 'kurir'=> $kr->username, 'player_id' => $kr->player_id];
+            $daftar_kurir[] = ['jarak'=> $jarak, 'kurir'=> $kr['username'], 'player_id' => $kr['player_id']];
         }
 
         sort($daftar_kurir);
@@ -333,11 +369,13 @@ class ProdukController extends Controller
 
         $poin_pembeli = Saldo::where('username', $username)->first();
         $poin_kurir = Saldo::where('username', $kurir)->first();
-        $total_ongkir +=  $poin_kurir->jumlah ;
+        $total_kurir = $total_ongkir + $poin_kurir->jumlah ;
+
+        // dd($poin_pembeli->jumlah);
 
         if ($poin_pembeli->jumlah >= $total_ongkir){
             $jumlah_pembeli = $poin_pembeli->jumlah - $total_ongkir;
-            $jumlah_kurir = $total_ongkir;
+            $jumlah_kurir = $total_kurir;
             DB::select("UPDATE saldo SET jumlah = '$jumlah_pembeli' WHERE username = '$username' ");
             DB::select("UPDATE saldo SET jumlah = '$jumlah_kurir' WHERE username = '$kurir' ");
 
@@ -419,6 +457,17 @@ class ProdukController extends Controller
         User::where('username', $username)->update(['nama' => $nama]);
         Pembeli::where('username', $username)->update($pembeli);
         return redirect('/keranjang')->with('success','data telah diubah...');
+    }
+
+    public function updateplayerid(Request $request){
+        $user = $request->user();
+
+        $username = $user->username;
+
+        $data_player_id = [
+            'player_id' => $_POST['player_id']
+        ];
+        Pembeli::where('username', $username)->update($data_player_id);
     }
 
 }

@@ -40,6 +40,12 @@ class CreateNewUser implements CreatesNewUsers
                 'max:255',
                 Rule::unique(User::class),
             ],
+            'nama_toko' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique(Penjual::class),
+            ],
             'password' => $this->passwordRules()
         ])->validate();
 
