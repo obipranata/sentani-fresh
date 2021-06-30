@@ -53,7 +53,7 @@ Route::middleware(['penjual'])->group(function(){
     Route::get('/riwayatpenjualan','penjual\RiwayatPenjualanController@index');
     Route::post('/topup_penjual', 'TopupController@index');
     Route::get('/notifpenjual', 'penjual\NotifController@index');
-    Route::post('/updatenotifpenjual/{kd_notif}', 'Penjual\NotifController@updatenotif');
+    Route::post('/updatenotifpenjual/{kd_notif}', 'penjual\NotifController@updatenotif');
     Route::post('/updateplayeridpenjual','penjual\NotifController@updateplayerid');
     Route::post('/penjual/riwayatpenjualan/download', 'penjual\RiwayatPenjualanController@download');
 });
