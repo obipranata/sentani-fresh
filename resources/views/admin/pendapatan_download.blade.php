@@ -28,37 +28,33 @@
 </head>
 <body>
 
-    <h1 style="text-align: center">Riwayat Penjualan</h1>
+    <h1 style="text-align: center">Riwayat Pendapatan</h1>
 
 <table id="customers">
     <thead>
         <tr>
             <th>No</th>
-            <th>Produk</th>
-            <th>No nota</th>
-            <th>Tgl pembelian</th>
-            <th>Jml produk</th>
-            <th>Total</th>
-            <th>Penjual</th>
+            <th>No Nota</th>
+            <th>Tgl Pembelian</th>
             <th>Pembeli</th>
             <th>Kurir</th>
+            <th>Total Transaksi (Rp)</th>
+            <th>Total Pendapatan (Rp)</th>
         </tr>
     </thead>
     <tbody>
         @php
             $i=0;
         @endphp
-        @foreach ($penjualan as $p)                       
+        @foreach ($pendapatan as $p)                       
             <tr>
                 <td>{{++$i}}</td>
-                <td>{{$p->nama_produk}}</td>
                 <td>{{$p->no_nota}}</td>
                 <td>{{$p->tgl_pembelian}}</td>
-                <td>{{$p->jml_produk}}</td>
-                <td>{{$p->total}}</td>
-                <td>{{$p->username}}</td>
                 <td>{{$p->pembeli}}</td>
                 <td>{{$p->kurir}}</td>
+                <td>{{number_format($p->total_transaksi)}}</td>
+                <td>{{number_format($p->total_pendapatan)}}</td>
             </tr>
         @endforeach
     </tbody>

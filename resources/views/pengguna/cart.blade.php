@@ -39,10 +39,7 @@
                                         @if (empty($notif))                                          
                                             <td>
                                                 <a href="" data-id="{{$k->kd_keranjang}}" data-nama="{{$k->nama_produk}}" class="btn btn-danger product-remove hapus">
-                                                    <form action="/keranjang/{{$k->kd_keranjang}}" id="delete{{$k->kd_keranjang}}" method="post">
-                                                        @csrf
-                                                        @method('delete')
-                                                    </form>
+                                                    
                                                     <span class="ion-ios-close"><span>
                                                 </a>
                                             </td>

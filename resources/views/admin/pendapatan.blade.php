@@ -70,7 +70,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form action="/admin/penjual/download" method="post">
+        <form action="/admin/pendapatan/download" method="post">
             @csrf
             <div class="modal-body">
                     <div class="row">

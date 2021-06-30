@@ -373,6 +373,23 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $(`form#delete${id}`).submit();
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/keranjang/'+id,
+                    data: {
+                        "_token": "{{ csrf_token() }}"
+                    },
+                    success: function(data){
+                        window.location.replace("/keranjang");
+                    }
+                });
             }
         })
     })

@@ -37,6 +37,7 @@ Route::middleware(['admin'])->group(function(){
     Route::post('/admin/kurir/download', 'admin\KurirController@download');
     Route::post('/admin/penjual/download', 'admin\PenjualController@download');
     Route::post('/admin/riwayatpenjualan/download', 'admin\PenjualanController@download');
+    Route::post('/admin/pendapatan/download', 'admin\PendapatanController@download');
     Route::resource('kategori', 'admin\KategoriController');
     Route::resource('admin/pembeli', 'admin\PembeliController');
     Route::resource('admin/kurir', 'admin\KurirController');
@@ -54,6 +55,7 @@ Route::middleware(['penjual'])->group(function(){
     Route::get('/notifpenjual', 'penjual\NotifController@index');
     Route::post('/updatenotifpenjual/{kd_notif}', 'Penjual\NotifController@updatenotif');
     Route::post('/updateplayeridpenjual','penjual\NotifController@updateplayerid');
+    Route::post('/penjual/riwayatpenjualan/download', 'penjual\RiwayatPenjualanController@download');
 });
 
 Route::middleware(['pembeli'])->group(function(){
@@ -64,7 +66,7 @@ Route::middleware(['pembeli'])->group(function(){
     Route::put('/editalamat', 'ProdukController@editalamat');
     Route::put('/bayarkurir/{kurir}/{total_ongkir}', 'ProdukController@bayarkurir');
     Route::post('/kirimnotif/{username}/{harga_produk}/{total_ongkir}', 'ProdukController@kirimnotif');
-    Route::delete('/keranjang/{kd_keranjang}', 'ProdukController@hapuskeranjang');
+    Route::post('/keranjang/{kd_keranjang}', 'ProdukController@hapuskeranjang');
     Route::post('/nilaiproduk/{kd_pembelian}/{bintang}', 'ProdukController@nilaiproduk');
     Route::post('/insertnilai/{kd_pembelian}/{bintang}', 'ProdukController@insertnilai');
     Route::post('/topup', 'TopupController@index');
