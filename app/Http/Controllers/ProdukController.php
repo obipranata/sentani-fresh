@@ -267,6 +267,7 @@ class ProdukController extends Controller
 
         $k1 = DB::select("SELECT * FROM kurir"); 
         $k2 = DB::select("SELECT * FROM notif"); 
+
         foreach($k1 as $k){
             $a[] = $k->username;
         }
@@ -274,7 +275,11 @@ class ProdukController extends Controller
             $b[] = $k->kurir;
         }
 
-        $result=array_diff($a,$b);
+        if(empty($k2)){
+            $result = $a;
+        }else{
+            $result=array_diff($a,$b);
+        }
 
         foreach ($result as $r){
             foreach($k1 as $k){
