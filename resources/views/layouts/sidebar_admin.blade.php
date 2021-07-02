@@ -1,6 +1,15 @@
 
 <div class="sidebar-menu">
     <ul class="menu">
+
+        @php
+            $pendapatan = DB::select("SELECT SUM(total)*0.02 as total_pendapatan FROM `pembelian` GROUP BY no_nota");
+            foreach ($pendapatan as $p) {
+                $total[] = $p->total_pendapatan;
+            }
+        @endphp
+
+        <h6>Pendapatan (<span class="text-primary">{{number_format(array_sum($total))}}</span>)</h6>
         <li class="sidebar-title">Menu</li>
 
         <li class="sidebar-item {{Request::segment(1) == 'home' ? 'active' : ''}} ">

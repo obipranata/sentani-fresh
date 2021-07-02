@@ -75,6 +75,7 @@
             <div class="form-group">
                   <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password" placeholder="masukan ulang password">
             </div>
+            <input type="hidden" class="form-control @error('nama_toko') is-invalid @enderror" placeholder="nama toko" name="nama_toko" required value="test">
             <div class="form-group">
               <button type="submit" class="btn btn-primary py-3 px-5">Daftar</button>
             </div>

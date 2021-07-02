@@ -82,6 +82,8 @@ class CreateNewUser implements CreatesNewUsers
             'username' => $input['username'],
             'jumlah' => 0
         ];
+
+
         Saldo::insert($data_saldo);
 
         return User::create([
@@ -91,7 +93,6 @@ class CreateNewUser implements CreatesNewUsers
             'password' => Hash::make($input['password']),
             'level' =>  $input['jenis_daftar']
         ]);
-
 
     }
 }
