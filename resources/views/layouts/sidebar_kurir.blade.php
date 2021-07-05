@@ -25,7 +25,7 @@
         <li class="sidebar-item {{ Request::segment(2) == 'riwayatpenjualan' ? 'active' : '' }}">
             <a href="/kurir/riwayatpenjualan" class='sidebar-link'>
                 <i class="bi bi-clock"></i>
-                <span>Riwayat Penjualan</span>
+                <span>Riwayat Pengantaran</span>
             </a>
         </li>
         

@@ -29,17 +29,24 @@
                     @else                 
                     <h6>Ongkos Kirim <span class="text-success">Rp.{{number_format($total_ongkir)}}</span></h6>
                         <ul class="list-group">
-                            @foreach ($daftar_belanja as $d)                                         
+                            @foreach ($daftar_belanja as $d)  
+                                                                
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <span> {{$d->nama_produk}} <small class="text-primary">({{$d->nama_toko}})</small></span>
                                     <span> {{$d->alamat}} </span>
+                                        @foreach ($penjual as $p)
+                                            @if ($p->username == $d->penjual)
+                                                <span> {{$p->nama}} <small class="text-primary">(Penjual)</small></span>
+                                                <span> {{$d->no_penjual}} <small class="text-primary">(No Penjual)</small></span>
+                                            @endif
+                                        @endforeach  
                                     <span class="badge bg-warning badge-pill badge-round ml-1">{{$d->jumlah}}</span>
                                 </li>
                             @endforeach
                         </ul>
 
                         <p class="text-danger">pengantaran sesuai dengan alamat dibawah ini</p>
-                        <p>Nama: {{$user->nama}}</p>
+                        <p>Nama Pembeli: {{$user->nama}}</p>
                         <p>Alamat: {{$pembeli->alamat}}, {{$pembeli->no_hp}}</p>
                         @if ($notif->status == 0)
                             <div class="row">
