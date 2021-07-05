@@ -46,7 +46,7 @@
                                 <td>{{$p->pembeli}}</td>
                                 <td>{{$p->jml}}</td>
                                 <td>{{$p->alamat_pembeli}}</td>
-                                <td>{{$p->total_ongkir}}</td>
+                                <td>{{round($p->total_ongkir)}}</td>
                             </tr>
                         @endforeach
                     </tbody>
