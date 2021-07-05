@@ -25,6 +25,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::middleware(['kurir'])->group(function(){
     Route::get('/notif', 'kurir\NotifController@notif');
+    Route::get('/kurir/riwayatpenjualan', 'kurir\KurirController@riwayatpengantaran');
+    Route::post('/kurir/riwayatpenjualan/download', 'kurir\KurirController@download');
     Route::post('/updatenotif/{kd_notif}', 'kurir\NotifController@updatenotif');
     Route::post('/kirimnotifbaru/{pembeli}/{kurir_reject}', 'kurir\NotifController@kirimnotifbaru');
     Route::post('/kirimpesan/{pembeli}', 'kurir\NotifController@kirimpesan');

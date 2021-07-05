@@ -5,6 +5,8 @@ namespace App\Http\Controllers\kurir;
 use App\Http\Controllers\Controller;
 use App\Models\Kurir;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use PDF;
 
 class KurirController extends Controller
 {
@@ -29,5 +31,25 @@ class KurirController extends Controller
             'player_id' => $_POST['player_id']
         ];
         Kurir::where('username', $username)->update($data_player_id);
+    }
+
+    public function riwayatpengantaran(Request $request){
+        $user = $request->user();
+
+        $username = $user->username;
+
+        $data['penjualan'] = DB::select("SELECT pembelian.*, produk.nama_produk, detail_produk.foto, penjual.username, penjual.alamat, sum(pembelian.jml_produk) as jml FROM pembelian, produk, detail_produk, penjual WHERE pembelian.kd_produk = produk.kd_produk AND detail_produk.kd_produk = produk.kd_produk AND penjual.kd_penjual = produk.kd_penjual AND pembelian.kurir = '$username' GROUP BY produk.kd_produk, pembelian.no_nota ORDER BY pembelian.kd_pembelian");
+        return view('kurir.riwayatpenjualan', $data);
+    }
+
+    public function download(Request $request){
+        $user = $request->user();
+
+        $username = $user->username;
+        $dari = $request->dari;
+        $sampai = $request->sampai;
+        $data['penjualan'] = DB::select("SELECT pembelian.*, produk.nama_produk, detail_produk.foto, penjual.username, penjual.alamat, sum(pembelian.jml_produk) as jml FROM pembelian, produk, detail_produk, penjual WHERE pembelian.kd_produk = produk.kd_produk AND detail_produk.kd_produk = produk.kd_produk AND penjual.kd_penjual = produk.kd_penjual AND pembelian.kurir = '$username' AND (pembelian.tgl_pembelian BETWEEN '$dari' AND '$sampai') GROUP BY produk.kd_produk, pembelian.no_nota ORDER BY pembelian.kd_pembelian");
+        $pdf = PDF::loadView('kurir.riwayatpenjualan_download',$data);
+        return $pdf->download('riwayatpenjualan.pdf');
     }
 }

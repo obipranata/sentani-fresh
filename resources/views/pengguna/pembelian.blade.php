@@ -24,6 +24,7 @@
                          <thead class="thead-primary">
                             <tr class="text-center">
                                 <th>&nbsp;</th>
+                                <th>Tgl Pembelian</th>
                                 <th>Nama Produk</th>
                                 <th>Jumlah</th>
                                 <th>Total</th>
@@ -35,6 +36,10 @@
                                 <tr class="text-center">
                                     <td class="image-prod">
                                         <div class="img" style="background-image:url(/foto_produk/{{$p->foto}});"></div>
+                                    </td>
+
+                                    <td class="product-name">
+                                        <h3>{{$p->tgl_pembelian}}</h3>
                                     </td>
         
                                     <td class="product-name">

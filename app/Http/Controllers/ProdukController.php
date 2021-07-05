@@ -393,7 +393,7 @@ class ProdukController extends Controller
                 DB::select("UPDATE saldo SET jumlah = '$pendapatan_bersih' WHERE username = '$penjual' ");
             }
 
-            $this->_pembelian($username, $kurir);
+            $this->_pembelian($username, $kurir, $total_ongkir);
             DB::select("DELETE FROM notif WHERE pembeli = '$username' ");
             DB::select("DELETE FROM keranjang WHERE username = '$username' ");
 
@@ -403,7 +403,7 @@ class ProdukController extends Controller
         }
     }
 
-    private function _pembelian($pembeli, $kurir){
+    private function _pembelian($pembeli, $kurir, $total_ongkir){
         $keranjang = DB::select("SELECT keranjang.*, produk.*, penjual.lat, penjual.lng, penjual.kd_penjual, detail_produk.foto FROM penjual, produk, keranjang, detail_produk WHERE penjual.kd_penjual = produk.kd_penjual AND keranjang.kd_produk = produk.kd_produk AND keranjang.kd_produk = detail_produk.kd_produk AND keranjang.username = '$pembeli' GROUP BY produk.kd_produk ORDER BY keranjang.kd_keranjang");
 
         foreach($keranjang as $k){
@@ -412,11 +412,25 @@ class ProdukController extends Controller
                 'kd_produk' => $k->kd_produk,
                 'jml_produk' => $k->jumlah,
                 'total' => $k->jumlah * $k->harga,
+                'total_ongkir' => $total_ongkir,
                 'tgl_pembelian' => date('Y-m-d'),
                 'pembeli' => $pembeli,
                 'kurir' => $kurir
             ];
-            Pembelian::insert($pembelian);
+
+            $kd_pembelian = DB::table('pembelian')->insertGetId(
+                $pembelian
+            );
+            // Pembelian::insert($pembelian);
+
+            $rating = [
+                'rating' => 0,
+                'kd_pembelian' => $kd_pembelian,
+                'komentar' => '',
+                'status' => 0,
+            ];
+
+            Rating::insert($rating);
         }
     }
 
@@ -425,7 +439,7 @@ class ProdukController extends Controller
 
         $username = $user->username;
 
-        $data['pembelian'] = DB::select("SELECT pembelian.*, rating.*, produk.nama_produk, detail_produk.foto FROM pembelian, rating, produk, detail_produk WHERE pembelian.kd_pembelian = rating.kd_pembelian AND produk.kd_produk = pembelian.kd_produk AND produk.kd_produk = detail_produk.kd_produk AND pembelian.pembeli = '$username' GROUP BY produk.kd_produk ");
+        $data['pembelian'] = DB::select("SELECT pembelian.*, rating.*, produk.nama_produk, detail_produk.foto FROM pembelian, rating, produk, detail_produk WHERE pembelian.kd_pembelian = rating.kd_pembelian AND produk.kd_produk = pembelian.kd_produk AND produk.kd_produk = detail_produk.kd_produk AND pembelian.pembeli = '$username' ");
 
         return view('pengguna.pembelian',$data);
     }
