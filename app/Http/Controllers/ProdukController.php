@@ -439,7 +439,7 @@ class ProdukController extends Controller
 
         $username = $user->username;
 
-        $data['pembelian'] = DB::select("SELECT pembelian.*, rating.*, produk.nama_produk, detail_produk.foto FROM pembelian, rating, produk, detail_produk WHERE pembelian.kd_pembelian = rating.kd_pembelian AND produk.kd_produk = pembelian.kd_produk AND produk.kd_produk = detail_produk.kd_produk AND pembelian.pembeli = '$username' ");
+        $data['pembelian'] = DB::select("SELECT pembelian.*, rating.*, produk.nama_produk, detail_produk.foto FROM pembelian, rating, produk, detail_produk WHERE pembelian.kd_pembelian = rating.kd_pembelian AND produk.kd_produk = pembelian.kd_produk AND produk.kd_produk = detail_produk.kd_produk AND pembelian.pembeli = '$username' ORDER BY pembelian.kd_pembelian DESC");
 
         return view('pengguna.pembelian',$data);
     }
