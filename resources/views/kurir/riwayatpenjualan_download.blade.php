@@ -34,31 +34,27 @@
     <thead>
         <tr>
             <th>No</th>
-            <th>Nama Produk</th>
-            <th>Tgl antar</th>
-            <th>Jml Produk</th>
-            <th>Total Ongkir</th>
+            <th>Tgl Pembelian</th>
             <th>Nama Pembeli</th>
-            <th>Nama Penjual</th>
-            <th>Alamat Penjual</th>
+            <th>Jml Produk</th>
+            <th>Alamat Pembeli</th>
+            <th>Total Ongkir</th>
         </tr>
     </thead>
     <tbody>
         @php
             $i=0;
         @endphp
-        @foreach ($penjualan as $p)                       
-            <tr>
-                <td>{{++$i}}</td>
-                <td>{{$p->nama_produk}}</td>
-                <td>{{$p->tgl_pembelian}}</td>
-                <td>{{$p->jml}}</td>
-                <td>{{$p->total_ongkir}}</td>
-                <td>{{$p->pembeli}}</td>
-                <td>{{$p->username}}</td>
-                <td>{{$p->alamat}}</td>
-            </tr>
-        @endforeach
+                        @foreach ($penjualan as $p)                       
+                        <tr>
+                            <td>{{++$i}}</td>
+                            <td>{{$p->tgl_pembelian}}</td>
+                            <td>{{$p->pembeli}}</td>
+                            <td>{{$p->jml}}</td>
+                            <td>{{$p->alamat_pembeli}}</td>
+                            <td>{{$p->total_ongkir}}</td>
+                        </tr>
+                    @endforeach
     </tbody>
 </table>
 
