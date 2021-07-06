@@ -560,7 +560,7 @@
 </script>
 
 <script>
-    let sw = "{{ url('/assets/sw.js') }} ";
+    let sw = "{{ url('/sw.js') }} ";
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
             navigator.serviceWorker.register(sw).then(function(registration) {
