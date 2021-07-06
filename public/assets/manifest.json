@@ -3,7 +3,7 @@
     "background_color": "#cec4c4",
     "display": "standalone",
     "scope": "/",
-    "start_url": "/",
+    "start_url": "https://sentanifresh.online",
     "name": "Sentani Fresh",
     "short_name": "Sentani Fresh",
     "icons": [
