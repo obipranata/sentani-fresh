@@ -46,6 +46,7 @@
             });
         });
     </script>
+    <link rel="manifest" href="/assets/manifest.json">
 </head>
 
 <body class="goto-here">
@@ -556,4 +557,18 @@
             console.log('not supported');
         }
     });
+</script>
+
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/assets/sw.js').then(function(registration) {
+                // Registration was successful
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }, function(err) {
+                // registration failed :(
+                console.log('ServiceWorker registration failed: ', err);
+            });
+        });
+    }
 </script>
