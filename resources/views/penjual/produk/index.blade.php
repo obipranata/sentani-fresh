@@ -33,7 +33,20 @@
     <section class="section mt-2">
         <div class="card">
             <div class="card-header">
-                <a href="/produk/create" class="btn btn-primary tombol-tambah" >Produk +</a>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <a href="/produk/create" class="btn btn-primary tombol-tambah" >Produk +</a>
+                    </div>
+                    <div class="col-lg-6">
+                        <form action="/penjual/produk/cari" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="cari" placeholder="cari..">
+                                <small id="emailHelp" class="form-text text-muted">ketik kata kunci produk pencarian kemudian ENTER</small>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -42,7 +55,7 @@
                             <a href="/produk/{{$p->kd_produk}}" >
                                 <div class="card">
                                     <div class="card-content">
-                                        <img class="card-img-top img-fluid" src="foto_produk/{{$p->foto}}"
+                                        <img class="card-img-top img-fluid" src="/foto_produk/{{$p->foto}}"
                                             alt="Card image cap" />
                                         <div class="card-body">
                                             <h4 class="card-title">

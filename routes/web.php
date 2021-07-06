@@ -58,6 +58,7 @@ Route::middleware(['penjual'])->group(function(){
     Route::post('/updatenotifpenjual/{kd_notif}', 'penjual\NotifController@updatenotif');
     Route::post('/updateplayeridpenjual','penjual\NotifController@updateplayerid');
     Route::post('/penjual/riwayatpenjualan/download', 'penjual\RiwayatPenjualanController@download');
+    Route::post('/penjual/produk/cari', 'penjual\ProdukController@cari');
 });
 
 Route::middleware(['pembeli'])->group(function(){

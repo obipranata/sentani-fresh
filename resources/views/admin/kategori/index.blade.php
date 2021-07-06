@@ -28,7 +28,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Email</th>
+                            <th>Nama Kategori</th>
                             <th class="text-center" colspan="2">Aksi</th>
                         </tr>
                     </thead>

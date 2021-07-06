@@ -28,6 +28,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Tgl Daftar</th>
                             <th>Nama</th>
                             <th>No HP</th>
                             <th>Username</th>
@@ -42,12 +43,14 @@
                                 @if ($u->username == $k->username)
                                     @php
                                         $nama = $u->nama;
+                                        $tgl_daftar = $u->created_at
                                     @endphp
                                 
                                 @endif
                             @endforeach
                             <tr>
                                 <td>{{++$i}}</td>
+                                <td>{{$tgl_daftar}}</td>
                                 <td>{{$nama}}</td>
                                 <td>{{$k->no_hp}}</td>
                                 <td>{{$k->username}}</td>

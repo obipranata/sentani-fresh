@@ -31,6 +31,19 @@ class ProdukController extends Controller
         return view('penjual.produk.index', $data);
     }
 
+    public function cari(Request $request){
+
+        $user = $request->user();
+
+        $username = $user->username;
+        $cari = $request->cari;
+
+        $data['produk'] = Produk::all();
+        $data['detail_produk'] = Detail_produk::all();
+        $data['allproduk'] = DB::select("SELECT produk.*, detail_produk.*, penjual.* FROM produk,detail_produk, penjual WHERE produk.kd_produk = detail_produk.kd_produk AND produk.kd_penjual = penjual.kd_penjual AND penjual.username = '$username' AND produk.nama_produk LIKE '$cari%' GROUP BY produk.kd_produk");
+        return view('penjual.produk.index', $data);
+    }
+
     public function show($kd_produk){
         $data['detail_produk'] = DB::select("SELECT * FROM detail_produk WHERE kd_produk = '$kd_produk' ");
         $data['produk'] = collect(\DB::select("SELECT produk.*, kategori.nama_kategori FROM kategori, produk WHERE kategori.kd_kategori = produk.kd_kategori AND produk.kd_produk = '$kd_produk' "))->first();
