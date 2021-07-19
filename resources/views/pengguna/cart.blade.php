@@ -66,7 +66,7 @@
                                         <td class="total">Rp. {{number_format($k->harga * $k->jumlah)}}</td>
                                     </tr><!-- END TR-->    --}}
                                     
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-4 mb-2">
                                         <div class="card">
                                             <img src="/foto_produk/{{$k->foto}}" class="card-img-top" alt="...">
                                             <div class="card-body">
