@@ -99,7 +99,7 @@
     var cord = [];
 </script>
 
-@if (!empty(($daftar_belanja))  
+@if (!empty($daftar_belanja))  
     @foreach ($daftar_belanja as $dr)
         <script>
             cord.push([
