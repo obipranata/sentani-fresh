@@ -31,7 +31,7 @@
 
                         <div class="row">
                             @foreach ($daftar_belanja as $d)
-                                <div class="col-lg-4">
+                                <div class="col-lg-4 mb-2">
                                     <div class="card" style="background-color: #F2F7FF">
                                         <img src="/foto_produk/{{$d->foto}}" class="card-img-top" alt="...">
                                         <div class="card-body">

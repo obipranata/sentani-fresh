@@ -26,40 +26,36 @@
                 <div class="card-body">
                     @if (empty($daftar_belanja))
                     <p><span class="bg-danger text-white">Belum ada notifikasi atau permintaan pengantaran pesanan</span></p>
-                    @else    
-                        <ul class="list-group">
+                    @else 
                             @foreach ($daftar_belanja as $d)         
                                 @foreach ($notif as $n)
                                     @if ($n->status == 1)
                                         @if ($n->pembeli == $d->username)
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                <span> 
-                                                    {{$d->nama_produk}} 
-                                                    <small class="text-primary">
-                                                        ({{number_format($d->harga)}})
-                                                    </small>
-                                                </span>
-                                                <span> 
-                                                    {{$n->kurir}} 
-                                                    <small class="text-primary">
-                                                        (kurir)
-                                                    </small>
-                                                </span>
-                                                <span class="badge bg-warning badge-pill badge-round ml-1">
-                                                    {{$d->jumlah}}
-                                                </span>
-                                                <span>
+                                        <div class="col-lg-4 mb-2">
+                                            <div class="card" style="background-color: #F2F7FF">
+                                                <img src="/foto_produk/{{$d->foto}}" class="card-img-top" alt="...">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{$d->nama_produk}}</h5>
+                                                    <p class="card-text">
+                                                        Total : Rp. {{number_format($d->harga * $d->jumlah)}}
+                                                    </p>
+                                                    <p class="card-text">
+                                                        Kurir : {{$n->kurir}}
+                                                    </p>
+                                                    <p class="card-text">
+                                                        Jumlah : {{$d->jumlah}}
+                                                    </p>
                                                     <form action="/updatenotifpenjual/{{$n->kd_notif}}" method="POST" class="mt-4">
                                                         @csrf
                                                         <button class="btn btn-success btn-sm rounded-pill" type="submit">Konfirmasi</button>
                                                     </form>
-                                                </span>
-                                            </li>
+                                                </div>
+                                            </div>
+                                        </div>
                                         @endif
                                     @endif
                                 @endforeach                                
                             @endforeach
-                        </ul>
                     @endif
                 </div>
             </div>
