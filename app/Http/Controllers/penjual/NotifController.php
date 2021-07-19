@@ -21,8 +21,6 @@ class NotifController extends Controller
             $data['notif'] = $notif;
         }
 
-        // dd($daftar_belanja);
-
         return view('penjual.notif',$data);
     }
 

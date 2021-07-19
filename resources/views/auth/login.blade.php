@@ -75,13 +75,20 @@
                 Log in
               </button>
             </form>
+            <div class="text-center mt-2 text-lg fs-4">
+              <p>
+                <a class="font-bold" href="/">
+                  home
+                </a>
+              </p>
+            </div>
             <div class="text-center mt-5 text-lg fs-4">
               <p>
                 @if (Route::has('password.request'))
                 <a class="font-bold" href="{{ route('password.request') }}">
                     {{ __('Forgot Your Password?') }}
                 </a>
-            @endif
+                @endif
               </p>
             </div>
           </div>

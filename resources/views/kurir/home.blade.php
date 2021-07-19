@@ -22,6 +22,10 @@
         </div>
     </section>
 </div>
+
+<div id="googleMap" class="bg-white" style="height: 0;"></div>
+
+<script src="/assets/js/jquery.min.js"></script>
 <script src="/assets/js/chart.min.js"></script>
 <script>
     var speedCanvas = document.getElementById("speedChart");
@@ -74,5 +78,48 @@ var lineChart = new Chart(speedCanvas, {
     options: chartOptions
 });
 </script>
+
+<script type="text/javascript">
+    function myMap() {
+        var mapProp = {
+            center: new google.maps.LatLng(-2.53371, 140.71813),
+            zoom: 13,
+        };
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+        var marker;
+
+        var startPos;
+            var geoSuccess = function(position) {
+                startPos = position;
+                console.log(startPos.coords.latitude);
+                console.log(startPos.coords.longitude);
+                let url = "{{ url('/updatelokasi') }} ";
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {
+                        'lat' : startPos.coords.latitude,
+                        'lng' : startPos.coords.longitude,
+                        "_token": "{{ csrf_token() }}"
+                    },
+                    success: function(data){
+                        console.log(data);
+                    }
+                });
+            };
+            navigator.geolocation.getCurrentPosition(geoSuccess);
+  
+        var infowindow = new google.maps.InfoWindow({});
+  
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBLsBUFqgsrYYjB_jXFkC1Esh8qQv-Yzw4&callback=myMap"></script>
 
 @endsection

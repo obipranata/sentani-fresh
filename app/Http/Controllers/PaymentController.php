@@ -14,14 +14,6 @@ class PaymentController extends Controller
         $payload = $request->get_Content();
         $notification = json_decode($payload);
 
-        // $paymentParams = [
-        //     'order_id' => 'TOPUP-03',
-        //     'number' => uniqid(),
-        //     'amount' => 100000.00,
-        //     'method' => 'midtrans',
-        //     'payloads' => $payload
-        // ];
-
         $validSignatureKey = hash("sha512", $notification->order_id.$notification->status_code.$notification->gross_amount.env('SB-Mid-server-r_F6rNkCjIjTCy-cJhqGiFLp'));
 
         if($notification->signature_key != $validSignatureKey){

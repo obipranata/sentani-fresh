@@ -28,6 +28,7 @@ class NotifController extends Controller
             $data['user'] = User::where('username', $pembeli)->first();
             $data['penjual'] = User::all();
             $data['daftar_belanja'] = DB::select("SELECT keranjang.*, produk.*, penjual.lat, penjual.lng, penjual.kd_penjual,penjual.nama_toko, penjual.alamat, detail_produk.foto, penjual.username as penjual, penjual.no_hp as no_penjual FROM penjual, produk, keranjang, detail_produk WHERE penjual.kd_penjual = produk.kd_penjual AND keranjang.kd_produk = produk.kd_produk AND keranjang.kd_produk = detail_produk.kd_produk AND keranjang.username = '$pembeli' GROUP BY produk.kd_produk ORDER BY keranjang.kd_keranjang");
+            // dd($data['daftar_belanja']);
         }
 
         // dd($daftar_belanja);

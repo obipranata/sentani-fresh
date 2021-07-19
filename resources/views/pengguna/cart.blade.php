@@ -17,9 +17,9 @@
     <div class="container">
         <form id="update_keranjang" action="/updatekeranjang/{{ Auth::user()->username }}" method="POST">
             <div class="row">
-                <div class="col-md-12 ftco-animate">
-                    <div class="cart-list">
-                        <table class="table">
+                {{-- <div class="col-md-12 ftco-animate">
+                    <div class="cart-list"> --}}
+                        {{-- <table class="table">
                             <thead class="thead-primary">
                                 <tr class="text-center">
                                     @if (empty($notif))                                      
@@ -32,9 +32,9 @@
                                     <th>Total</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody> --}}
                                 @foreach ($all_keranjang as $k)
-                                    <tr class="text-center">
+                                    {{-- <tr class="text-center">
 
                                         @if (empty($notif))                                          
                                             <td>
@@ -64,12 +64,36 @@
                                         </td>
         
                                         <td class="total">Rp. {{number_format($k->harga * $k->jumlah)}}</td>
-                                    </tr><!-- END TR-->                               
+                                    </tr><!-- END TR-->    --}}
+                                    
+                                    <div class="col-lg-4">
+                                        <div class="card">
+                                            <img src="/foto_produk/{{$k->foto}}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{$k->nama_produk}}</h5>
+                                                <p class="card-text">
+                                                    Harga : Rp. {{number_format($k->harga)}}
+                                                </p>
+                                                <div class="input-group mb-3">
+                                                    <input type="text" name="jumlah[]" class="quantity form-control input-number"
+                                                            value="{{$k->jumlah}}" min="1" max="100">
+                                                </div>
+                                                <p class="card-text">
+                                                    Total : Rp. {{number_format($k->harga * $k->jumlah)}}
+                                                </p>
+                                                @if (empty($notif))    
+                                                    <a href="" data-id="{{$k->kd_keranjang}}" data-nama="{{$k->nama_produk}}" class="btn btn-danger product-remove hapus btn-block">
+                                                        <span class="ion-ios-close"><span>
+                                                    </a>
+                                            @endif
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                            {{-- </tbody> --}}
+                        {{-- </table> --}}
+                    {{-- </div>
+                </div> --}}
             </div>
 
             @if (empty($notif))               
@@ -78,7 +102,7 @@
                         <p>
                             @csrf
                             @method('put')
-                            <a class="btn btn-primary btn-block" href="/updatekeranjang/{{ Auth::user()->username }}"
+                            <a class="btn btn-primary" href="/updatekeranjang/{{ Auth::user()->username }}"
                             onclick="event.preventDefault(); document.getElementById('update_keranjang').submit();">
                             update keranjang
                             </a>

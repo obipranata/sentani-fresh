@@ -180,7 +180,6 @@ class ProdukController extends Controller
             $biaya_produk[] = $k->harga * $k->jumlah;
             $produk[] = $k->kd_penjual;
             if($produk_pertama == $k->kd_penjual){
-                // echo $k->harga + 0;
             }else{
                 $lat1= $all_keranjang[0]->lat;
                 $lat2= $k->lat;
@@ -200,9 +199,7 @@ class ProdukController extends Controller
 
         $data['total_ongkir'] = array_sum($data['ongkir']);
 
-        // total
         $data['total'] = array_sum($biaya_produk) + array_sum($data['ongkir']);
-        // dd(array_sum($biaya_produk));
 
         return view('pengguna.cart', $data);
     }
