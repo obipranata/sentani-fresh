@@ -81,9 +81,9 @@
                                 <button class="btn btn-success rounded-pill" type="submit">Kirim notif ke pembeli</button>
                             </form>
                         @endif
+                        <br>
+                        <div id="map" class="bg-white" style="height: 400px; width: 100%"></div>
                     @endif
-                    <br>
-                    <div id="map" class="bg-white" style="height: 400px; width: 100%"></div>
                 </div>
             </div>
         </div>
@@ -99,13 +99,15 @@
     var cord = [];
 </script>
 
-@foreach ($daftar_belanja as $dr)
-    <script>
-        cord.push([
-            {{$dr->lat}},{{$dr->lng}},"{{$dr->nama_toko}}","{{$dr->alamat}}","{{$dr->penjual}}"
-        ]);
-    </script>
-@endforeach
+@if (!empty(($daftar_belanja))  
+    @foreach ($daftar_belanja as $dr)
+        <script>
+            cord.push([
+                {{$dr->lat}},{{$dr->lng}},"{{$dr->nama_toko}}","{{$dr->alamat}}","{{$dr->penjual}}"
+            ]);
+        </script>
+    @endforeach
+@endif
 
   <script type="text/javascript">
     function myMap() {
