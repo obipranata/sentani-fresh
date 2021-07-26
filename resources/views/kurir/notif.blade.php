@@ -107,16 +107,50 @@
             ]);
         </script>
     @endforeach
+    <script>
+        let nama_pembeli = "{{$user->nama}}";
+        let alamat_pembeli = "{{$pembeli->alamat}}";
+        let lat_pembeli = {{$pembeli->lat}};
+        let lng_pembeli = {{$pembeli->lng}};
+    </script>
 @endif
 
   <script type="text/javascript">
+
     function myMap() {
+
+        console.log(nama_pembeli);
+
         var mapProp = {
             center: new google.maps.LatLng(-2.53371, 140.71813),
             zoom: 13,
         };
+
         var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
         var mapToko = new google.maps.Map(document.getElementById("map"), mapProp);
+
+        var marker_pembeli;
+        var lokasipembeli = new google.maps.InfoWindow({});
+        marker_pembeli = new google.maps.Marker({
+            position: new google.maps.LatLng(lat_pembeli, lng_pembeli),
+            map: mapToko,
+            icon: "/assets/images/casa.png",
+            animation: google.maps.Animation.BOUNCE
+        });
+        lokasipembeli.setContent(
+            `
+                <h6 class='az-content-label mg-b-5'> Pembeli: ${nama_pembeli} </h6>
+                <hr><p> Alamat: ${alamat_pembeli} </p> 
+                                
+                <p class='az-content-label mg-b-5' font-size='9px'>Titik Kordinat</p>
+                <p>${lat_pembeli}, ${lng_pembeli}</p>
+            `
+        );
+        lokasipembeli.open(mapToko, marker_pembeli);
+        marker_pembeli.addListener('click', function() {
+            lokasipembeli.open(mapToko, marker_pembeli);
+        });
+
         var marker;
         var lokasisekarang = new google.maps.InfoWindow({});
         window.onload = function() {

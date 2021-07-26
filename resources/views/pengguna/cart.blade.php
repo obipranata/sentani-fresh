@@ -152,15 +152,37 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-6">
+                            Jarak total
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {{$total_jarak}} Km
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            Berat
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {{round($total_berat, 2)}} Kg
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
                             Ongkos Kirim
                         </div>
                         <div class="col-md-6">
                             <div class="row">
-                                @foreach ($ongkir as $okr)
-                                    <div class="col-md-12">
-                                        Rp. {{number_format($okr)}}
-                                    </div>
-                                @endforeach
+                                <div class="col-md-12">
+                                    Rp. {{number_format($total_ongkir)}}
+                                </div>
                             </div>
                         </div>
                     </div>

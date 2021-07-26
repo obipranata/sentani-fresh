@@ -21,13 +21,13 @@ use Session;
 
 class ProdukController extends Controller
 {
-
     public function __construct()
     {
         $this->initPaymentGateway();
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $user = $request->user();
         if ($user) {
             $username = $user->username;
@@ -47,10 +47,9 @@ class ProdukController extends Controller
                 $payment_status = $paymentInfo->transaction_status;
 
                 if ($payment_status == 'success' || $payment_status =='settlement' || $payment_status =='expire') {
-
-                    if ($payment_status =='settlement'){
+                    if ($payment_status =='settlement') {
                         $settlement_time = $paymentInfo->settlement_time;
-                    } else if ($payment_status =='expire'){
+                    } elseif ($payment_status =='expire') {
                         $settlement_time = null;
                     }
 
@@ -69,25 +68,27 @@ class ProdukController extends Controller
         return view('pengguna.home', $data);
     }
 
-    public function produk(Request $request){
+    public function produk(Request $request)
+    {
         $cari = $request->cari;
-        if($cari == ''){
+        if ($cari == '') {
             $data['allproduk'] = DB::select("SELECT produk.*, detail_produk.*, penjual.* FROM produk,detail_produk, penjual WHERE produk.kd_produk = detail_produk.kd_produk AND produk.kd_penjual = penjual.kd_penjual GROUP BY produk.kd_produk");
-        }else{
+        } else {
             $data['allproduk'] = DB::select("SELECT produk.*, detail_produk.*, penjual.* FROM produk,detail_produk, penjual WHERE produk.kd_produk = detail_produk.kd_produk AND produk.kd_penjual = penjual.kd_penjual AND produk.nama_produk LIKE '$cari%' GROUP BY produk.kd_produk");
         }
         $data['kategori'] = DB::select("SELECT * FROM kategori");
         return view('pengguna.produk', $data);
     }
 
-    public function pilihproduk($kd_kategori){
+    public function pilihproduk($kd_kategori)
+    {
         $data['allproduk'] = DB::select("SELECT produk.*, detail_produk.*, penjual.* FROM produk,detail_produk, penjual WHERE produk.kd_produk = detail_produk.kd_produk AND produk.kd_penjual = penjual.kd_penjual  AND produk.kd_kategori = '$kd_kategori' GROUP BY produk.kd_produk");
         $data['kategori'] = DB::select("SELECT * FROM kategori");
         return view('pengguna.produk', $data);
     }
 
-    public function single($kd_produk){
-        
+    public function single($kd_produk)
+    {
         $data['produk'] = DB::select("SELECT produk.*, detail_produk.*, penjual.* FROM produk,detail_produk, penjual WHERE produk.kd_produk = detail_produk.kd_produk AND produk.kd_penjual = penjual.kd_penjual AND produk.kd_produk = '$kd_produk' GROUP BY produk.kd_produk");
 
         $rating = DB::select("SELECT pembelian.kd_produk, AVG(rating.rating) as jml, rating.status, rating.komentar FROM pembelian, rating WHERE pembelian.kd_pembelian = rating.kd_pembelian AND rating.status = 1 AND pembelian.kd_produk = '$kd_produk' GROUP BY pembelian.kd_produk");
@@ -101,9 +102,9 @@ class ProdukController extends Controller
 
         $data['detail_produk'] = DB::select("SELECT * FROM detail_produk WHERE kd_produk = '$kd_produk' ORDER BY kd_detail_produk");
 
-        if(!empty($rating)){
-            $data['rating'] = round($rating[0]->jml,1);
-            $data['bintang'] = explode('.',$data['rating']);
+        if (!empty($rating)) {
+            $data['rating'] = round($rating[0]->jml, 1);
+            $data['bintang'] = explode('.', $data['rating']);
         }
 
         $kd_kategori = $data['produk'][0]->kd_kategori;
@@ -113,51 +114,52 @@ class ProdukController extends Controller
         return view('pengguna.single', $data);
     }
 
-    public function tambahkeranjang(Request $request, $kd_produk){
+    public function tambahkeranjang(Request $request, $kd_produk)
+    {
         $user = $request->user();
 
         $username = $user->username;
 
         $produk = Produk::where('kd_produk', $kd_produk)->first();
-        if(!$request->jumlah){
+        if (!$request->jumlah) {
             $jumlah = 1;
         } else {
             $jumlah = $request->jumlah;
-            if($jumlah > $produk->stok){
+            if ($jumlah > $produk->stok) {
                 return redirect('/single/'.$kd_produk)->with('error', 'permintaan melebihi stok!');
             }
         }
 
         $cek_keranjang = DB::select("SELECT * FROM keranjang WHERE kd_produk = '$kd_produk' AND username = '$username' ");
 
-        if(empty($cek_keranjang)){
+        if (empty($cek_keranjang)) {
             $data_insert = [
                 'jumlah' => $jumlah,
                 'kd_produk' => $kd_produk,
                 'username' => $username
-            ];    
+            ];
             Keranjang::insert($data_insert);
-        }else{
+        } else {
             $data_update = [
                 'jumlah' => $cek_keranjang[0]->jumlah + $jumlah,
                 'kd_produk' => $kd_produk,
                 'username' => $username
-            ];   
+            ];
             Keranjang::where('kd_produk', $kd_produk)
             ->where('username', $username)->update($data_update);
         }
         return redirect('/')->with('success', 'ditambahkan');
     }
 
-    public function keranjang(Request $request){
-
+    public function keranjang(Request $request)
+    {
         $user = $request->user();
 
         $username = $user->username;
 
         $all_keranjang = DB::select("SELECT keranjang.*, produk.*, penjual.lat, penjual.lng, penjual.kd_penjual, detail_produk.foto FROM penjual, produk, keranjang, detail_produk WHERE penjual.kd_penjual = produk.kd_penjual AND keranjang.kd_produk = produk.kd_produk AND keranjang.kd_produk = detail_produk.kd_produk AND keranjang.username = '$username' GROUP BY produk.kd_produk ORDER BY keranjang.kd_keranjang");
 
-        if (empty($all_keranjang)){
+        if (empty($all_keranjang)) {
             return redirect('/')->with('error', 'oops... tidak ada produk didalam keranjang');
         }
 
@@ -167,44 +169,84 @@ class ProdukController extends Controller
         $data['notif'] = Notif::where(['pembeli' => $username])->first();
 
         // dapatkan tarif jarak antara pembeli dan penjual
-        $jarak_normal = $this->_jarak($pembeli->lat,$pembeli->lng,$all_keranjang[0]->lat,$all_keranjang[0]->lng);
+        $jarak_normal = $this->_jarak($pembeli->lat, $pembeli->lng, $all_keranjang[0]->lat, $all_keranjang[0]->lng);
+        $berat = [];
         $list_ongkir = [];
-        $ongkir_normal = $jarak_normal + 1000;
+        $ongkir_normal = $jarak_normal;
         array_push($list_ongkir, $ongkir_normal);
 
         $data['all_keranjang'] = $all_keranjang;
 
         $produk_pertama = $all_keranjang[0]->kd_penjual;
 
-        foreach ($all_keranjang as $k){
+        foreach ($all_keranjang as $k) {
+            if ($k->satuan == 'Gram' || $k->satuan == 'gram') {
+                $gram = $k->berat * 0.001;
+                array_push($berat, $gram);
+            } else {
+                array_push($berat, $k->berat);
+            }
+
             $biaya_produk[] = $k->harga * $k->jumlah;
             $produk[] = $k->kd_penjual;
-            if($produk_pertama == $k->kd_penjual){
-            }else{
+            if ($produk_pertama == $k->kd_penjual) {
+            } else {
                 $lat1= $all_keranjang[0]->lat;
                 $lat2= $k->lat;
                 $lon1= $all_keranjang[0]->lng;
                 $lon2= $k->lng;
 
-                $jarak = $this->_jarak($lat1,$lon1,$lat2,$lon2);
+                $jarak = $this->_jarak($lat1, $lon1, $lat2, $lon2);
                 
-                if($jarak > 100){
-                    $list_ongkir[] = 1000 + $jarak;
-                }
+                
+                $list_ongkir[] = $jarak;
+                
+                // if ($jarak > 100) {
+                //     $list_ongkir[] = 1000 + $jarak;
+                // }
             }
         }
-        $data['ongkir'] = array_unique($list_ongkir);
 
+        // dd($berat);
+
+        if (array_sum($berat) <= 5) {
+            $hasil_berat = (5000);
+        } elseif (array_sum($berat)<=10) {
+            $hasil_berat = (10000);
+        } elseif (array_sum($berat)<=15) {
+            $hasil_berat = (15000);
+        } elseif (array_sum($berat)<=20) {
+            $hasil_berat = (20000);
+        } elseif (array_sum($berat)<=25) {
+            $hasil_berat = (25000);
+        } elseif (array_sum($berat)<=30) {
+            $hasil_berat = (30000);
+        } elseif (array_sum($berat)<=35) {
+            $hasil_berat = (35000);
+        } elseif (array_sum($berat)<=40) {
+            $hasil_berat = (40000);
+        } elseif (array_sum($berat)<=45) {
+            $hasil_berat = (45000);
+        } elseif (array_sum($berat)<=50) {
+            $hasil_berat = (50000);
+        } elseif (array_sum($berat)>50) {
+            $hasil_berat = (1 * array_sum($berat));
+        }
+
+        $data['ongkir'] = array_unique($list_ongkir);
         $data['harga_produk'] = array_sum($biaya_produk);
 
-        $data['total_ongkir'] = array_sum($data['ongkir']);
+        $data['total_ongkir'] = round((array_sum($data['ongkir'])* 0.001), 2) * $hasil_berat;
+        $data['total_berat'] = array_sum($berat);
+        $data['total_jarak'] = round((array_sum($data['ongkir'])* 0.001), 2) ;
 
-        $data['total'] = array_sum($biaya_produk) + array_sum($data['ongkir']);
+        $data['total'] = array_sum($biaya_produk) +  $data['total_ongkir'];
 
         return view('pengguna.cart', $data);
     }
 
-    private function _jarak($lat1, $lon1, $lat2, $lon2){
+    private function _jarak($lat1, $lon1, $lat2, $lon2)
+    {
         $theta = $lon1 - $lon2;
         $miles = (sin(deg2rad($lat1)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)));
         $miles = acos($miles);
@@ -215,35 +257,34 @@ class ProdukController extends Controller
         return $meter;
     }
 
-    public function updatekeranjang(Request $request, $username){
-
+    public function updatekeranjang(Request $request, $username)
+    {
         $user = $request->user();
 
         $username = $user->username;
 
-        $keranjang = DB::select("SELECT * FROM keranjang WHERE username = '$username' "); 
+        $keranjang = DB::select("SELECT * FROM keranjang WHERE username = '$username' ");
         
         $gagal_update = [];
-        for ($i=0; $i<count($keranjang); $i++){
+        for ($i=0; $i<count($keranjang); $i++) {
             $kd_keranjang = $keranjang[$i]->kd_keranjang;
             $kd_produk = $keranjang[$i]->kd_produk;
             $jumlah = $request->jumlah[$i];
             
             $produk = DB::select("SELECT * FROM produk WHERE kd_produk = '$kd_produk' ");
 
-            if ($produk[0]->kd_produk == $kd_produk){
-                if (($produk[0]->stok - $jumlah) >= 0){
+            if ($produk[0]->kd_produk == $kd_produk) {
+                if (($produk[0]->stok - $jumlah) >= 0) {
                     DB::select("UPDATE keranjang SET jumlah = '$jumlah' WHERE kd_keranjang = '$kd_keranjang' ");
-                }else{
+                } else {
                     $gagal_update[] = $produk[0]->nama_produk. ' hanya tersisa '.$produk[0]->stok;
                 }
             }
-            
         }
         
         // dd($gagal_update);
         
-        if(!empty($gagal_update)){
+        if (!empty($gagal_update)) {
             // dd('tidak kosong');
             return redirect('/keranjang')->with('errorupdate', $gagal_update);
         }
@@ -251,36 +292,38 @@ class ProdukController extends Controller
         return redirect('/keranjang')->with('success', 'ubah');
     }
 
-    public function hapuskeranjang($kd_keranjang){
+    public function hapuskeranjang($kd_keranjang)
+    {
         DB::select("DELETE FROM keranjang WHERE kd_keranjang = '$kd_keranjang' ");
         return redirect('/keranjang')->with('success', 'hapus');
     }
 
-    public function kirimnotif(Request $request, $username, $harga_produk, $total_ongkir){
+    public function kirimnotif(Request $request, $username, $harga_produk, $total_ongkir)
+    {
         $user = $request->user();
         $username = $user->username;
 
         $all_keranjang = DB::select("SELECT keranjang.*, produk.*, penjual.lat, penjual.lng, penjual.kd_penjual, detail_produk.foto FROM penjual, produk, keranjang, detail_produk WHERE penjual.kd_penjual = produk.kd_penjual AND keranjang.kd_produk = produk.kd_produk AND keranjang.kd_produk = detail_produk.kd_produk AND keranjang.username = '$username' GROUP BY produk.kd_produk ORDER BY keranjang.kd_keranjang");
 
-        $k1 = DB::select("SELECT * FROM kurir"); 
-        $k2 = DB::select("SELECT * FROM notif"); 
+        $k1 = DB::select("SELECT * FROM kurir");
+        $k2 = DB::select("SELECT * FROM notif");
 
-        foreach($k1 as $k){
+        foreach ($k1 as $k) {
             $a[] = $k->username;
         }
-        foreach($k2 as $k){
+        foreach ($k2 as $k) {
             $b[] = $k->kurir;
         }
 
-        if(empty($k2)){
+        if (empty($k2)) {
             $result = $a;
-        }else{
-            $result=array_diff($a,$b);
+        } else {
+            $result=array_diff($a, $b);
         }
 
-        foreach ($result as $r){
-            foreach($k1 as $k){
-                if($r == $k->username){
+        foreach ($result as $r) {
+            foreach ($k1 as $k) {
+                if ($r == $k->username) {
                     $kurir[]= [
                         'username' => $r,
                         'lat' => $k->lat,
@@ -291,25 +334,25 @@ class ProdukController extends Controller
             }
         }
 
-        if (!empty($kurir)){
+        if (!empty($kurir)) {
             $saldo = Saldo::where('username', $username)->first();
-            if ($saldo->jumlah >= ($harga_produk + $total_ongkir)){
+            if ($saldo->jumlah >= ($harga_produk + $total_ongkir)) {
                 $jumlah = $saldo->jumlah - $harga_produk;
                 DB::select("UPDATE saldo SET jumlah = '$jumlah' WHERE username = '$username' ");
-            }else{
-                return redirect('/keranjang')->with('error','maaf saldo anda tidak cukup !');
+            } else {
+                return redirect('/keranjang')->with('error', 'maaf saldo anda tidak cukup !');
             }
         } else {
-            return redirect('/keranjang')->with('error','maaf tidak ada kurir yang siap!');
+            return redirect('/keranjang')->with('error', 'maaf tidak ada kurir yang siap!');
         }
 
-        foreach($kurir as $kr){
+        foreach ($kurir as $kr) {
             $lat1= $all_keranjang[0]->lat;
             $lat2= $kr['lat'];
             $lon1= $all_keranjang[0]->lng;
             $lon2= $kr['lng'];
 
-            $jarak = $this->_jarak($lat1,$lon1,$lat2,$lon2);
+            $jarak = $this->_jarak($lat1, $lon1, $lat2, $lon2);
 
             $daftar_kurir[] = ['jarak'=> $jarak, 'kurir'=> $kr['username'], 'player_id' => $kr['player_id']];
         }
@@ -329,10 +372,11 @@ class ProdukController extends Controller
         $this->_sendMessage($username, $kurir_terpilih['player_id']);
         // dd($notif);
         // dd(min($daftar_kurir));
-        return redirect('/keranjang')->with('success','sedang diproses... tunggu kurir mengkonfirmasi belanjaan anda!');
+        return redirect('/keranjang')->with('success', 'sedang diproses... tunggu kurir mengkonfirmasi belanjaan anda!');
     }
 
-    private function _sendMessage($pembeli, $kurir){
+    private function _sendMessage($pembeli, $kurir)
+    {
         $content = array(
             "en" => "@$pembeli sedang memesan produk, harap kamu segera konfirmasi pengantaran"
             );
@@ -351,11 +395,11 @@ class ProdukController extends Controller
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ch, CURLOPT_HEADER, FALSE);
-        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
         $response = curl_exec($ch);
         curl_close($ch);
@@ -363,7 +407,8 @@ class ProdukController extends Controller
         return $response;
     }
 
-    public function bayarkurir(Request $request, $kurir, $total_ongkir){
+    public function bayarkurir(Request $request, $kurir, $total_ongkir)
+    {
         $user = $request->user();
         $username = $user->username;
 
@@ -375,14 +420,14 @@ class ProdukController extends Controller
 
         // dd($poin_pembeli->jumlah);
 
-        if ($poin_pembeli->jumlah >= $total_ongkir){
+        if ($poin_pembeli->jumlah >= $total_ongkir) {
             $jumlah_pembeli = $poin_pembeli->jumlah - $total_ongkir;
             $jumlah_kurir = $total_kurir;
             DB::select("UPDATE saldo SET jumlah = '$jumlah_pembeli' WHERE username = '$username' ");
             DB::select("UPDATE saldo SET jumlah = '$jumlah_kurir' WHERE username = '$kurir' ");
 
             // saldo akan masuk ke para penjual
-            foreach($toko as $t){
+            foreach ($toko as $t) {
                 $laku = $t->laku;
                 $penjual = $t->username;
                 $poin_penjual = Saldo::where('username', $penjual)->first();
@@ -394,16 +439,17 @@ class ProdukController extends Controller
             DB::select("DELETE FROM notif WHERE pembeli = '$username' ");
             DB::select("DELETE FROM keranjang WHERE username = '$username' ");
 
-            return redirect('/')->with('success','transaksi pembayaran selesai!');
-        }else{
-            return redirect('/keranjang')->with('error','maaf saldo anda tidak cukup !');
+            return redirect('/')->with('success', 'transaksi pembayaran selesai!');
+        } else {
+            return redirect('/keranjang')->with('error', 'maaf saldo anda tidak cukup !');
         }
     }
 
-    private function _pembelian($pembeli, $kurir, $total_ongkir){
+    private function _pembelian($pembeli, $kurir, $total_ongkir)
+    {
         $keranjang = DB::select("SELECT keranjang.*, produk.*, penjual.lat, penjual.lng, penjual.kd_penjual, detail_produk.foto FROM penjual, produk, keranjang, detail_produk WHERE penjual.kd_penjual = produk.kd_penjual AND keranjang.kd_produk = produk.kd_produk AND keranjang.kd_produk = detail_produk.kd_produk AND keranjang.username = '$pembeli' GROUP BY produk.kd_produk ORDER BY keranjang.kd_keranjang");
 
-        foreach($keranjang as $k){
+        foreach ($keranjang as $k) {
             $pembelian = [
                 'no_nota' => time(),
                 'kd_produk' => $k->kd_produk,
@@ -431,17 +477,19 @@ class ProdukController extends Controller
         }
     }
 
-    public function pembelian(Request $request){
+    public function pembelian(Request $request)
+    {
         $user = $request->user();
 
         $username = $user->username;
 
         $data['pembelian'] = DB::select("SELECT pembelian.*, rating.*, produk.nama_produk, detail_produk.foto FROM pembelian, rating, produk, detail_produk WHERE pembelian.kd_pembelian = rating.kd_pembelian AND produk.kd_produk = pembelian.kd_produk AND produk.kd_produk = detail_produk.kd_produk AND pembelian.pembeli = '$username' ORDER BY pembelian.kd_pembelian DESC");
 
-        return view('pengguna.pembelian',$data);
+        return view('pengguna.pembelian', $data);
     }
 
-    public function nilaiproduk(Request $request, $kd_pembelian, $bintang){
+    public function nilaiproduk(Request $request, $kd_pembelian, $bintang)
+    {
         $user = $request->user();
 
         $username = $user->username;
@@ -449,16 +497,18 @@ class ProdukController extends Controller
         $data['pembelian'] = DB::select("SELECT pembelian.*, rating.*, produk.nama_produk, detail_produk.foto FROM pembelian, rating, produk, detail_produk WHERE pembelian.kd_pembelian = rating.kd_pembelian AND produk.kd_produk = pembelian.kd_produk AND produk.kd_produk = detail_produk.kd_produk AND pembelian.pembeli = '$username' AND pembelian.kd_pembelian = '$kd_pembelian' GROUP BY produk.kd_produk ");
         $data['bintang'] = $bintang;
 
-        return view('pengguna.nilaiproduk',$data);
+        return view('pengguna.nilaiproduk', $data);
     }
 
-    public function insertnilai(Request $request, $kd_pembelian, $bintang){
+    public function insertnilai(Request $request, $kd_pembelian, $bintang)
+    {
         $komentar = $request->komentar;
         DB::select("UPDATE rating SET rating = '$bintang', status = 1, komentar='$komentar' WHERE kd_pembelian = '$kd_pembelian' ");
-        return redirect('/pembelian')->with('success','terima kasih sudah melakukan penilaian');
+        return redirect('/pembelian')->with('success', 'terima kasih sudah melakukan penilaian');
     }
 
-    public function editalamat(Request $request){
+    public function editalamat(Request $request)
+    {
         $user = $request->user();
         $username = $user->username;
 
@@ -472,10 +522,11 @@ class ProdukController extends Controller
         ];
         User::where('username', $username)->update(['nama' => $nama]);
         Pembeli::where('username', $username)->update($pembeli);
-        return redirect('/keranjang')->with('success','data telah diubah...');
+        return redirect('/keranjang')->with('success', 'data telah diubah...');
     }
 
-    public function updateplayerid(Request $request){
+    public function updateplayerid(Request $request)
+    {
         $user = $request->user();
 
         $username = $user->username;
@@ -485,5 +536,4 @@ class ProdukController extends Controller
         ];
         Pembeli::where('username', $username)->update($data_player_id);
     }
-
 }
