@@ -43,9 +43,10 @@
                                 @if ($u->username == $k->username)
                                     @php
                                         $nama = $u->nama;
-                                        $tgl_daftar = $u->created_at
+                                        $tgl_daftar = $u->created_at;
                                     @endphp
                                 
+
                                 @endif
                             @endforeach
                             <tr>
