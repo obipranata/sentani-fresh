@@ -44,7 +44,6 @@
                                     @php
                                         $nama = $u->nama;
                                         $tgl_daftar = $u->created_at;
-                                        var_dump($tgl_daftar);
                                     @endphp
                                 
 
