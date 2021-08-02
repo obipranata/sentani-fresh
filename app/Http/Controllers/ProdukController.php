@@ -181,10 +181,10 @@ class ProdukController extends Controller
 
         foreach ($all_keranjang as $k) {
             if ($k->satuan == 'Gram' || $k->satuan == 'gram') {
-                $gram = $k->berat * 0.001;
+                $gram = $k->berat* $k->jumlah * 0.001;
                 array_push($berat, $gram);
             } else {
-                array_push($berat, $k->berat);
+                array_push($berat, $k->berat*$k->jumlah);
             }
 
             $biaya_produk[] = $k->harga * $k->jumlah;
