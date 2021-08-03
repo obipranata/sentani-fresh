@@ -255,6 +255,18 @@
                     <label for="country">No Hp</label>
                     <input type="text" class="form-control text-left px-3" name="no_hp" placeholder="No hp..." value="{{$pembeli->no_hp}}">
                 </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="lat" placeholder="latitude" name="lat" value="{{$pembeli->lat}}">
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="lng" placeholder="longitude" name="lng" value="{{$pembeli->lng}}">
+                </div>
+                <script type="text/javascript">
+                    var cord = [];
+                </script>
+          
+                    <div id="googleMap" class="bg-white" style="height: 600px; width: 100%"></div>
+              
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>

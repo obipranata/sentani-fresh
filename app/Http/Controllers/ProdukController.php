@@ -515,10 +515,14 @@ class ProdukController extends Controller
         $nama = $request->nama;
         $alamat = $request->alamat;
         $no_hp = $request->no_hp;
+        $lat = $request->lat;
+        $lng = $request->lng;
 
         $pembeli = [
             'alamat' => $alamat,
-            'no_hp' => $no_hp
+            'no_hp' => $no_hp,
+            'lat' => $lat,
+            'lng' => $lng,
         ];
         User::where('username', $username)->update(['nama' => $nama]);
         Pembeli::where('username', $username)->update($pembeli);
