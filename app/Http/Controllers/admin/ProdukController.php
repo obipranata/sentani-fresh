@@ -18,7 +18,7 @@ class ProdukController extends Controller
     public function show($kd_produk)
     {
         $data['detail_produk'] = DB::select("SELECT * FROM detail_produk WHERE kd_produk = '$kd_produk' ");
-        $data['produk'] = collect(\DB::select("SELECT produk.*, kategori.nama_kategori FROM kategori, produk WHERE kategori.kd_kategori = produk.kd_kategori AND produk.kd_produk = '$kd_produk' "))->first();
+        $data['produk'] = collect(\DB::select("SELECT produk.*, kategori.nama_kategori FROM kategori, produk WHERE kategori.kd_kategori = produk.kd_kategori AND produk.kd_produk = '$kd_produk' ORDER BY produk.status "))->first();
 
         return view('admin.produk.detail', $data);
     }
@@ -29,6 +29,6 @@ class ProdukController extends Controller
 
         DB::table('produk')->where('kd_produk', $kd_produk)->update(['status' => $status]);
 
-        return redirect("/admin/produk/$kd_produk");
+        return redirect("/admin/produk");
     }
 }
