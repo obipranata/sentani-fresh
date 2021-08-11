@@ -23,18 +23,18 @@ Route::get('/single/{kd_produk}', 'ProdukController@single');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware(['verified']);
 
-Route::middleware(['kurir'])->group(function(){
+Route::middleware(['kurir'])->group(function () {
     Route::get('/notif', 'kurir\NotifController@notif');
     Route::get('/kurir/riwayatpenjualan', 'kurir\KurirController@riwayatpengantaran');
     Route::post('/kurir/riwayatpenjualan/download', 'kurir\KurirController@download');
     Route::post('/updatenotif/{kd_notif}', 'kurir\NotifController@updatenotif');
     Route::post('/kirimnotifbaru/{pembeli}/{kurir_reject}', 'kurir\NotifController@kirimnotifbaru');
     Route::post('/kirimpesan/{pembeli}', 'kurir\NotifController@kirimpesan');
-    Route::post('/updatelokasi','kurir\KurirController@updatelokasi');
-    Route::post('/updateplayerid','kurir\KurirController@updateplayerid');
+    Route::post('/updatelokasi', 'kurir\KurirController@updatelokasi');
+    Route::post('/updateplayerid', 'kurir\KurirController@updateplayerid');
 });
 
-Route::middleware(['admin'])->group(function(){
+Route::middleware(['admin'])->group(function () {
     Route::post('/admin/pembeli/download', 'admin\PembeliController@download');
     Route::post('/admin/kurir/download', 'admin\KurirController@download');
     Route::post('/admin/penjual/download', 'admin\PenjualController@download');
@@ -46,22 +46,23 @@ Route::middleware(['admin'])->group(function(){
     Route::resource('admin/penjual', 'admin\PenjualController');
     Route::resource('admin/penjualan', 'admin\PenjualanController');
     Route::resource('admin/pendapatan', 'admin\PendapatanController');
+    Route::resource('admin/produk', 'admin\ProdukController');
 });
 
-Route::middleware(['penjual'])->group(function(){
+Route::middleware(['penjual'])->group(function () {
     Route::resource('produk', 'penjual\ProdukController');
     Route::delete('/detailproduk/{kd_detail_produk}', 'penjual\ProdukController@delete');
-    Route::post('/tambahfoto/{kd_produk}','penjual\ProdukController@tambahfoto');
-    Route::get('/riwayatpenjualan','penjual\RiwayatPenjualanController@index');
+    Route::post('/tambahfoto/{kd_produk}', 'penjual\ProdukController@tambahfoto');
+    Route::get('/riwayatpenjualan', 'penjual\RiwayatPenjualanController@index');
     Route::post('/topup_penjual', 'TopupController@index');
     Route::get('/notifpenjual', 'penjual\NotifController@index');
     Route::post('/updatenotifpenjual/{kd_notif}', 'penjual\NotifController@updatenotif');
-    Route::post('/updateplayeridpenjual','penjual\NotifController@updateplayerid');
+    Route::post('/updateplayeridpenjual', 'penjual\NotifController@updateplayerid');
     Route::post('/penjual/riwayatpenjualan/download', 'penjual\RiwayatPenjualanController@download');
     Route::post('/penjual/produk/cari', 'penjual\ProdukController@cari');
 });
 
-Route::middleware(['pembeli'])->group(function(){
+Route::middleware(['pembeli'])->group(function () {
     Route::post('/tambahkeranjang/{kd_produk}', 'ProdukController@tambahkeranjang');
     Route::get('/keranjang', 'ProdukController@keranjang');
     Route::get('/pembelian', 'ProdukController@pembelian');
@@ -73,7 +74,7 @@ Route::middleware(['pembeli'])->group(function(){
     Route::post('/nilaiproduk/{kd_pembelian}/{bintang}', 'ProdukController@nilaiproduk');
     Route::post('/insertnilai/{kd_pembelian}/{bintang}', 'ProdukController@insertnilai');
     Route::post('/topup', 'TopupController@index');
-    Route::post('/updateplayeridpembeli','ProdukController@updateplayerid');
+    Route::post('/updateplayeridpembeli', 'ProdukController@updateplayerid');
 });
 
 Route::post('/payment/notification', 'PaymentController@notification');
@@ -81,12 +82,12 @@ Route::get('/payment/completed', 'PaymentController@completed');
 Route::get('/payment/failed', 'PaymentController@failed');
 Route::get('/payment/unfinish', 'PaymentController@unfinish');
 
-Route::get('/daftar-penjual', function(){
+Route::get('/daftar-penjual', function () {
     return view('pengguna.daftar_penjual');
 });
-Route::get('/daftar-pembeli', function(){
+Route::get('/daftar-pembeli', function () {
     return view('pengguna.daftar_pembeli');
 });
-Route::get('/daftar-kurir', function(){
+Route::get('/daftar-kurir', function () {
     return view('pengguna.daftar_kurir');
 });

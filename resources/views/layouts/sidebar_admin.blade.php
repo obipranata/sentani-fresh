@@ -25,9 +25,16 @@
                 <span>Kategori</span>
             </a>
         </li>
+
+        <li class="sidebar-item {{ Request::segment(2) == 'produk' ? 'active' : '' }}">
+            <a href="/admin/produk" class='sidebar-link'>
+                <i class="bi bi-briefcase"></i>
+                <span>Produk</span>
+            </a>
+        </li>
         
         <li class="sidebar-title">Laporan</li>
-        <li class="sidebar-item {{ Request::segment(2) == 'pembeli' ? 'active' : '' }}">
+        {{-- <li class="sidebar-item {{ Request::segment(2) == 'pembeli' ? 'active' : '' }}">
             <a href="/admin/pembeli" class='sidebar-link'>
                 <i class="bi bi-person"></i>
                 <span>Pembeli</span>
@@ -44,7 +51,7 @@
                 <i class="bi bi-basket"></i>
                 <span>Penjual</span>
             </a>
-        </li>
+        </li> --}}
         <li class="sidebar-item {{ Request::segment(2) == 'penjualan' ? 'active' : '' }}">
             <a href="/admin/penjualan" class='sidebar-link'>
                 <i class="bi bi-bag-check"></i>

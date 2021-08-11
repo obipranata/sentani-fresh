@@ -74,7 +74,7 @@
 var speedData = {
     labels: [<?php 
         foreach ($penjualan as $p) {
-            echo "'".$p->bulan."',";
+            echo "'".$p->nama_produk."',";
         }
     ?>],
     datasets: [{

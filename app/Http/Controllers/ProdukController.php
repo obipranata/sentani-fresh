@@ -62,7 +62,7 @@ class ProdukController extends Controller
             }
         }
 
-        $data['allproduk'] = DB::select("SELECT produk.*, detail_produk.*, penjual.* FROM produk,detail_produk, penjual WHERE produk.kd_produk = detail_produk.kd_produk AND produk.kd_penjual = penjual.kd_penjual GROUP BY produk.kd_produk");
+        $data['allproduk'] = DB::select("SELECT produk.*, detail_produk.*, penjual.* FROM produk,detail_produk, penjual WHERE produk.kd_produk = detail_produk.kd_produk AND produk.kd_penjual = penjual.kd_penjual AND produk.status = 1 GROUP BY produk.kd_produk");
 
 
         return view('pengguna.home', $data);
@@ -72,9 +72,9 @@ class ProdukController extends Controller
     {
         $cari = $request->cari;
         if ($cari == '') {
-            $data['allproduk'] = DB::select("SELECT produk.*, detail_produk.*, penjual.* FROM produk,detail_produk, penjual WHERE produk.kd_produk = detail_produk.kd_produk AND produk.kd_penjual = penjual.kd_penjual GROUP BY produk.kd_produk");
+            $data['allproduk'] = DB::select("SELECT produk.*, detail_produk.*, penjual.* FROM produk,detail_produk, penjual WHERE produk.kd_produk = detail_produk.kd_produk AND produk.kd_penjual = penjual.kd_penjual AND produk.status = 1 GROUP BY produk.kd_produk");
         } else {
-            $data['allproduk'] = DB::select("SELECT produk.*, detail_produk.*, penjual.* FROM produk,detail_produk, penjual WHERE produk.kd_produk = detail_produk.kd_produk AND produk.kd_penjual = penjual.kd_penjual AND produk.nama_produk LIKE '$cari%' GROUP BY produk.kd_produk");
+            $data['allproduk'] = DB::select("SELECT produk.*, detail_produk.*, penjual.* FROM produk,detail_produk, penjual WHERE produk.kd_produk = detail_produk.kd_produk AND produk.kd_penjual = penjual.kd_penjual AND produk.status = 1 AND produk.nama_produk LIKE '$cari%' GROUP BY produk.kd_produk");
         }
         $data['kategori'] = DB::select("SELECT * FROM kategori");
         return view('pengguna.produk', $data);
@@ -82,7 +82,7 @@ class ProdukController extends Controller
 
     public function pilihproduk($kd_kategori)
     {
-        $data['allproduk'] = DB::select("SELECT produk.*, detail_produk.*, penjual.* FROM produk,detail_produk, penjual WHERE produk.kd_produk = detail_produk.kd_produk AND produk.kd_penjual = penjual.kd_penjual  AND produk.kd_kategori = '$kd_kategori' GROUP BY produk.kd_produk");
+        $data['allproduk'] = DB::select("SELECT produk.*, detail_produk.*, penjual.* FROM produk,detail_produk, penjual WHERE produk.kd_produk = detail_produk.kd_produk AND produk.kd_penjual = penjual.kd_penjual  AND produk.kd_kategori = '$kd_kategori' AND produk.status = 1 GROUP BY produk.kd_produk");
         $data['kategori'] = DB::select("SELECT * FROM kategori");
         return view('pengguna.produk', $data);
     }
@@ -431,7 +431,8 @@ class ProdukController extends Controller
                 $laku = $t->laku;
                 $penjual = $t->username;
                 $poin_penjual = Saldo::where('username', $penjual)->first();
-                $pendapatan_bersih = ($laku - ($laku * 0.02)) + $poin_penjual->jumlah;
+                // $pendapatan_bersih = ($laku - ($laku * 0.02)) + $poin_penjual->jumlah;
+                $pendapatan_bersih = ($laku) + $poin_penjual->jumlah;
                 DB::select("UPDATE saldo SET jumlah = '$pendapatan_bersih' WHERE username = '$penjual' ");
             }
 

@@ -1,6 +1,6 @@
-@extends('layouts.templates_penjual')
+@extends('layouts.templates_admin')
 
-@section('content_penjual')
+@section('content_admin')
 <div class="page-heading">
     <div class="page-title">
         <div class="row">
@@ -17,26 +17,14 @@
                 </nav>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-danger">
-                        Bahan makanan yang dijual pada aplikasi ini adalah bahan makanan yang telah dibersihkan dan siap untuk dimasak saat sampai pada tangan pembeli.
-                    </li>
-                    <li class="list-group-item list-group-item-warning">
-                        setiap pembelian dari hasil penjualan akan dipotong 2% oleh sistem.
-                    </li>
-                </ul>
-            </div>
-        </div>
     </div>
     <section class="section mt-2">
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-lg-6">
+                    {{-- <div class="col-lg-6">
                         <a href="/produk/create" class="btn btn-primary tombol-tambah" >Produk +</a>
-                    </div>
+                    </div> --}}
                     <div class="col-lg-6">
                         <form action="/penjual/produk/cari" method="POST">
                             @csrf
@@ -52,7 +40,7 @@
                 <div class="row">
                     @foreach ($allproduk as $p)                      
                         <div class="col-lg-3">
-                            <a href="/produk/{{$p->kd_produk}}" >
+                            <a href="/admin/produk/{{$p->kd_produk}}" >
                                 <div class="card">
                                     <div class="card-content">
                                         <img class="card-img-top img-fluid" src="/foto_produk/{{$p->foto}}"
@@ -60,21 +48,14 @@
                                         <div class="card-body">
                                             <h4 class="card-title">
                                                 Rp{{number_format($p->harga)}}
-                                                <a href="#" data-id="{{$p->kd_produk}}" data-nama="{{$p->nama_produk}}" class="btn btn-sm btn-danger hapus">
-                                                    <form action="/produk/{{$p->kd_produk}}" id="delete{{$p->kd_produk}}" method="post">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                    </form>
-                                                    <i class="fas fa-window-close"></i>
-                                                </a>
                                             </h4>
                                             <p class="card-text">
                                                 {{$p->nama_produk}}.
                                             </p>
                                             @if ($p->status == 0)
-                                            <p class="text-danger">
-                                                Belum dicek 
-                                            </p>
+                                                <p class="text-danger">
+                                                    Belum dicek 
+                                                </p>
                                             @elseif($p->status == 1)
                                                 <p class="text-success">
                                                     Terverifikasi 

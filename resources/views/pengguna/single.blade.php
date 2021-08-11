@@ -60,7 +60,10 @@
                     @endif
                 </div>
                 <p class="price"><span>Rp{{number_format($produk[0]->harga)}}</span></p>
-               
+                <p>
+                    <span class="icon-map-pin text-danger"></span>
+                    {{$produk[0]->alamat}}
+                </p>
                 <?= $produk[0]->deskripsi ?>
                 <form action="/tambahkeranjang/{{$produk[0]->kd_produk}}" method="POST">
                     @csrf

@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="/admin/assets/vendors/bootstrap-icons/bootstrap-icons.css">
     <link rel="stylesheet" href="/admin/assets/css/app.css">
     <link rel="shortcut icon" href="/admin/assets/images/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="/assets/fontawesome/css/all.min.css">
 </head>
 
 <body>
