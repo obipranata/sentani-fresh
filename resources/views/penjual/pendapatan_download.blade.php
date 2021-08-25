@@ -36,7 +36,6 @@
             <th>No</th>
             <th>No Nota</th>
             <th>Tgl Pembelian</th>
-            <th>Total Transaksi (Rp)</th>
             <th>Total Pendapatan (Rp)</th>
         </tr>
     </thead>
@@ -49,7 +48,6 @@
                 <td>{{++$i}}</td>
                 <td>{{$p->no_nota}}</td>
                 <td>{{$p->tgl_pembelian}}</td>
-                <td>{{number_format($p->total_transaksi)}}</td>
                 <td>{{number_format($p->total_pendapatan)}}</td>
             </tr>
         @endforeach

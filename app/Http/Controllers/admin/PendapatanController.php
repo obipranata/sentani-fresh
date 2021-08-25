@@ -26,7 +26,7 @@ class PendapatanController extends Controller
     {
         $dari = $request->dari;
         $sampai = $request->sampai;
-        $data['pendapatan'] = DB::select("SELECT SUM(total)*0.02 as total_pendapatan, SUM(total) as total_transaksi ,pembelian.* FROM `pembelian` GROUP BY no_nota");
+        $data['pendapatan'] = DB::select("SELECT SUM(total)*0.02 as total_pendapatan, SUM(total) as total_transaksi ,pembelian.* FROM `pembelian` WHERE (tgl_pembelian BETWEEN '$dari' AND '$sampai') GROUP BY no_nota");
         // return view('admin.pembeli_download', $data);
         $pdf = PDF::loadView('admin.pendapatan_download', $data);
         return $pdf->download('pendapatan.pdf');

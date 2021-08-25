@@ -97,52 +97,52 @@
 <script>
     var speedCanvas = document.getElementById("speedChart");
 
-    // Chart.defaults.global.defaultFontFamily = "Lato";
-    // Chart.defaults.global.defaultFontSize = 18;
+// Chart.defaults.global.defaultFontFamily = "Lato";
+// Chart.defaults.global.defaultFontSize = 18;
 
 var speedData = {
-    labels: [<?php 
-        foreach ($penjualan as $p) {
-            echo "'".$p->bulan."',";
-        }
-    ?>],
-    datasets: [{
-        label: "Penjualan per bulan",
-        data: [<?php 
-        foreach ($penjualan as $p) {
-            echo $p->total_produk.",";
-        }
-    ?>],
-        lineTension: 0,
-        fill: false,
-        borderColor: 'orange',
-        backgroundColor: 'transparent',
-        borderDash: [5, 5],
-        pointBorderColor: 'orange',
-        pointBackgroundColor: 'rgba(255,150,0,0.5)',
-        pointRadius: 5,
-        pointHoverRadius: 10,
-        pointHitRadius: 30,
-        pointBorderWidth: 2,
-        pointStyle: 'rectRounded'
-    }]
+labels: [<?php 
+    foreach ($penjualan as $p) {
+        echo "'".$p->nama_produk."',";
+    }
+?>],
+datasets: [{
+    label: "Penjualan per bulan",
+    data: [<?php 
+    foreach ($penjualan as $p) {
+        echo $p->total_produk.",";
+    }
+?>],
+    lineTension: 0,
+    fill: false,
+    borderColor: 'orange',
+    backgroundColor: 'transparent',
+    borderDash: [5, 5],
+    pointBorderColor: 'orange',
+    pointBackgroundColor: 'rgba(255,150,0,0.5)',
+    pointRadius: 5,
+    pointHoverRadius: 10,
+    pointHitRadius: 30,
+    pointBorderWidth: 2,
+    pointStyle: 'rectRounded'
+}]
 };
 
 var chartOptions = {
-    legend: {
-        display: true,
-        position: 'top',
-        labels: {
-            boxWidth: 80,
-            fontColor: 'black'
-        }
+legend: {
+    display: true,
+    position: 'top',
+    labels: {
+        boxWidth: 80,
+        fontColor: 'black'
     }
+}
 };
 
 var lineChart = new Chart(speedCanvas, {
-    type: 'line',
-    data: speedData,
-    options: chartOptions
+type: 'line',
+data: speedData,
+options: chartOptions
 });
 </script>
 @endsection

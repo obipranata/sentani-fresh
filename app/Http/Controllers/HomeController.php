@@ -57,7 +57,8 @@ class HomeController extends Controller
                 $data['pembeli'] = DB::select("SELECT count(kd_pembeli) as jml_pembeli FROM pembeli");
                 $data['produk'] = DB::select("SELECT count(kd_produk) as jml_produk FROM produk");
                 $data['terjual'] = DB::select("SELECT sum(jml_produk) as jml_terjual FROM pembelian");
-                $data['penjualan'] = DB::select("SELECT pembelian.*, produk.nama_produk, penjual.username, sum(pembelian.jml_produk) as total_produk, DATE_FORMAT(pembelian.tgl_pembelian, '%M') as bulan FROM pembelian, produk, penjual WHERE pembelian.kd_produk = produk.kd_produk AND penjual.kd_penjual = produk.kd_penjual GROUP BY MONTH(pembelian.tgl_pembelian) ORDER BY MONTH(pembelian.tgl_pembelian)");
+                // $data['penjualan'] = DB::select("SELECT pembelian.*, produk.nama_produk, penjual.username, sum(pembelian.jml_produk) as total_produk, DATE_FORMAT(pembelian.tgl_pembelian, '%M') as bulan FROM pembelian, produk, penjual WHERE pembelian.kd_produk = produk.kd_produk AND penjual.kd_penjual = produk.kd_penjual GROUP BY MONTH(pembelian.tgl_pembelian) ORDER BY MONTH(pembelian.tgl_pembelian)");
+                $data['penjualan'] = DB::select("SELECT pembelian.*, produk.kd_produk, produk.nama_produk, penjual.username, sum(pembelian.jml_produk) as total_produk, DATE_FORMAT(pembelian.tgl_pembelian, '%M') as bulan FROM pembelian, produk, penjual WHERE pembelian.kd_produk = produk.kd_produk AND penjual.kd_penjual = produk.kd_penjual GROUP BY produk.kd_produk");
                 return view('admin.home', $data);
             } elseif ($user->level == 2) {
                 $data['pembeli'] = DB::select("SELECT pembelian.*, penjual.username, SUM(pembelian.total) as total_pembelian FROM pembelian, penjual, produk WHERE produk.kd_penjual = penjual.kd_penjual AND penjual.username = '$username' AND pembelian.kd_produk = produk.kd_produk GROUP BY pembelian.pembeli ORDER BY total_pembelian DESC");

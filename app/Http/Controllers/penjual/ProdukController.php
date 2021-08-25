@@ -70,13 +70,12 @@ class ProdukController extends Controller
         $produk->nama_produk = $request->nama_produk;
         $produk->stok = $request->stok;
         $produk->berat = $request->berat;
-        $produk->harga = $request->harga;
+        $produk->harga = $request->harga + ($request->harga * 0.02);
         $produk->deskripsi = $request->deskripsi;
         $produk->kd_kategori = $request->kd_kategori;
         $produk->kd_penjual = $penjual->kd_penjual;
         $produk->satuan = $request->satuan;
         $produk->status = 0;
-
         $produk->save();
 
         for ($i=0; $i < count($request->foto); $i++) {

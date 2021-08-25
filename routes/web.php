@@ -50,6 +50,7 @@ Route::middleware(['admin'])->group(function () {
 });
 
 Route::middleware(['penjual'])->group(function () {
+    Route::resource('pendapatan', 'penjual\PendapatanController');
     Route::resource('produk', 'penjual\ProdukController');
     Route::delete('/detailproduk/{kd_detail_produk}', 'penjual\ProdukController@delete');
     Route::post('/tambahfoto/{kd_produk}', 'penjual\ProdukController@tambahfoto');
@@ -59,6 +60,7 @@ Route::middleware(['penjual'])->group(function () {
     Route::post('/updatenotifpenjual/{kd_notif}', 'penjual\NotifController@updatenotif');
     Route::post('/updateplayeridpenjual', 'penjual\NotifController@updateplayerid');
     Route::post('/penjual/riwayatpenjualan/download', 'penjual\RiwayatPenjualanController@download');
+    Route::post('/penjual/pendapatan/download', 'penjual\PendapatanController@download');
     Route::post('/penjual/produk/cari', 'penjual\ProdukController@cari');
 });
 

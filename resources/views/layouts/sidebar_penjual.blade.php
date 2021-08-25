@@ -37,6 +37,13 @@
             </a>
         </li>
 
+        <li class="sidebar-item {{ Request::segment(1) == 'pendapatan' ? 'active' : '' }}">
+            <a href="/pendapatan" class='sidebar-link'>
+                <i class="bi bi-bag-check"></i>
+                <span>Pendapatan</span>
+            </a>
+        </li>
+
         @if (!empty($topup))           
             {{-- <li class="sidebar-item">
                 <a href="#" class='sidebar-link' data-toggle="modal" data-target="#transaksiModal">

@@ -431,8 +431,8 @@ class ProdukController extends Controller
                 $laku = $t->laku;
                 $penjual = $t->username;
                 $poin_penjual = Saldo::where('username', $penjual)->first();
-                // $pendapatan_bersih = ($laku - ($laku * 0.02)) + $poin_penjual->jumlah;
-                $pendapatan_bersih = ($laku) + $poin_penjual->jumlah;
+                $pendapatan_bersih = ($laku - ($laku * 0.02)) + $poin_penjual->jumlah;
+                // $pendapatan_bersih = ($laku) + $poin_penjual->jumlah;
                 DB::select("UPDATE saldo SET jumlah = '$pendapatan_bersih' WHERE username = '$penjual' ");
             }
 
